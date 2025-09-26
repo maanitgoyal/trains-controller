@@ -13,5 +13,5 @@ Blog 2 - Task B
 
 Day 1 - 26-09-2025
 This is a really big task. A lot of stuff is happening at once . I am starting with simulating function. I need to modify Station.java to return maximum number of trains allowed at a station. Now i am thinking that i need to make current number of trains as well. Added few functions in Station.java for accounting current number of trains. Simulate function is done. Had to make some changes in Train.java. Have added some new fields for tracking last station the train has visited. This was easy.
-I just found out that I missed checking for circular routes in simulate function. I have added that now.
+I just found out that I missed checking for circular routes in simulate function. I have added that now. I also forgot to increment and decrement the current amount of trains, I have done that now. Used ternary operator to use cur index which will help in that.
 Now for task bii, i am figuring out how to check for loads and passengers. Probably have to make few classes.
