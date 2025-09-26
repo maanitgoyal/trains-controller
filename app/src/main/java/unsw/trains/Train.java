@@ -63,13 +63,6 @@ public class Train {
         }
     }
 
-    public Station findStation(List<Station> stations, String stationId) {
-        for (Station station : stations) {
-            if (station.getStationId().equals(stationId)) return station;
-        }
-        return null;
-    }
-
     public Train(String trainId, String type, String stationId, List<String> route, List<Track> tracks, List<Station> stations) throws InvalidRouteException {
         String start = route.get(0);
         String end = route.get(route.size() - 1);
@@ -79,7 +72,7 @@ public class Train {
         this.route = route;
         this.location = stationId;
         this.type = type;
-        this.position = findStation(stations, stationId).getStationCoordinates();
+        this.position = Helper.findStation(stations, stationId).getStationCoordinates();
     }
 
     public String getTrainId() {

@@ -95,9 +95,9 @@ public class TrainsController {
             int cur = (last == routeSize - 1 && t.isCircular()) ? 0 : last + 1;
 
             String stationIdCur = t.getRoute().get(last);
-            Station stationCur = t.findStation(stations, stationIdCur);
+            Station stationCur = Helper.findStation(stations, stationIdCur);
             String stationIdFinal = t.getRoute().get(cur);
-            Station stationFinal = t.findStation(this.stations, stationIdFinal);
+            Station stationFinal = Helper.findStation(this.stations, stationIdFinal);
 
             if (stationFinal.checkIfStationIsFull()) continue;
 
