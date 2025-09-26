@@ -13,32 +13,47 @@ import unsw.response.models.*;
  */
 public class TrainsController {
     // Add any fields here if necessary
+    List<Station> stations = new ArrayList<>();
+    List<Track> tracks = new ArrayList<>();
+    List<Train> trains = new ArrayList<>();
     public void createStation(String stationId, String type, double x, double y) {
-        // Todo: Task ai
+        Station st = new Station(stationId, type, x, y);
+        stations.add(st);
     }
 
     public void createTrack(String trackId, String fromStationId, String toStationId) {
-        // Todo: Task aii
+        Track tr = new Track(trackId, fromStationId, toStationId);
+        tracks.add(tr);
     }
 
     public void createTrain(String trainId, String type, String stationId, List<String> route)
             throws InvalidRouteException {
-        // Todo: Task aiii
+        Train t = new Train(trainId, type, stationId, route, this.tracks);
+        trains.add(t);
     }
 
     public List<String> listStationIds() {
-        // Todo: Task aiv
-        return new ArrayList<>();
+        List<String> l = new ArrayList<>();
+        for (Station st : stations) {
+            l.add(st.getStationId());
+        }
+        return l;
     }
 
     public List<String> listTrackIds() {
-        // Todo: Task av
-        return new ArrayList<>();
+        List<String> l = new ArrayList<>();
+        for (Track tr : tracks) {
+            l.add(tr.getTrackId());
+        }
+        return l;
     }
 
     public List<String> listTrainIds() {
-        // Todo: Task avi
-        return new ArrayList<>();
+        List<String> l = new ArrayList<>();
+        for (Train t : trains) {
+            l.add(t.getTrainId());
+        }
+        return l;
     }
 
     public TrainInfoResponse getTrainInfo(String trainId) {
