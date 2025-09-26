@@ -7,10 +7,10 @@ import java.util.Objects;
 import unsw.exceptions.InvalidRouteException;
 import unsw.utils.Position;
 
-public class Train extends Position {
+public class Train {
     private String trainId;
     private String type;
-    private String firstStation;
+    private int lastIndex;
     private List<String> route = new ArrayList<>();
     private double speed;
     private int load;
@@ -18,6 +18,7 @@ public class Train extends Position {
     private boolean cargo;
     private boolean linearRoute;
     private boolean circularRoute;
+    private Position position;
     private String location;
 
     public boolean isRouteValid(List<Track> tracks, String st1, String st2) {
@@ -66,27 +67,23 @@ public class Train extends Position {
         }
     }
 
-    private static Position findLocationOfStation(List<Station> stations, String stationId) {
-        for (Station s : stations) {
-            if (Objects.equals(s.getStationId(), stationId)) {
-                return new Position(s.getX(), s.getY());
-            }
+    public Station findStation(List<Station> stations, String stationId) {
+        for (Station station : stations) {
+            if (station.getStationId().equals(stationId)) return station;
         }
-        return new Position(0.0, 0.0);
+        return null;
     }
 
     public Train(String trainId, String type, String stationId, List<String> route, List<Track> tracks, List<Station> stations) throws InvalidRouteException {
-        super(findLocationOfStation(stations, stationId).getX(),
-        findLocationOfStation(stations, stationId).getY());
-
         String start = route.get(0);
-        String end   = route.get(route.size() - 1);
+        String end = route.get(route.size() - 1);
         setType(type, tracks, start, end);
         this.trainId = trainId;
-        this.firstStation = stationId;
+        this.lastIndex = 0;
         this.route = route;
-        this.location = this.firstStation;
+        this.location = stationId;
         this.type = type;
+        this.position = findStation(stations, stationId).getStationCoordinates();
     }
 
     public String getTrainId() {
@@ -101,7 +98,28 @@ public class Train extends Position {
         return this.type;
     }
 
-    public Position getTrainCoordinates() {
-        return new Position(this.getX(), this.getY());
+    public Position getTrainPosition() {
+        return this.position;
     }
+
+    public void setTrainPosition(Position newPos) {
+        this.position = newPos;
+    }
+
+    public int getLastIndex() {
+        return this.lastIndex;
+    }
+
+    public void setLastIndex(int index) {
+        this.lastIndex = index;
+    }
+
+    public List<String> getRoute() {
+        return this.route;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
 }

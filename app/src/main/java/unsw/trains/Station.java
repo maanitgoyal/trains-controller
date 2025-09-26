@@ -2,12 +2,13 @@ package unsw.trains;
 
 import unsw.utils.Position;
 
-public class Station extends Position{
+public class Station extends Position {
     private String stationId;
     private String type;
     private int maxTrains;
     private double passengers;
     private double cargo;
+    private int curTrains;
 
     public void setType(String t) {
         switch (t) {
@@ -40,6 +41,7 @@ public class Station extends Position{
         super(x, y);
         this.stationId = stationId;
         this.type = type;
+        this.curTrains = 0;
         setType(type);
     }
 
@@ -55,4 +57,21 @@ public class Station extends Position{
     public Position getStationCoordinates() {
         return new Position(this.getX(), this.getY());
     }
+
+    public int getMaxTrains() {
+        return maxTrains;
+    }
+
+    public boolean checkIfStationIsFull() {
+        return this.curTrains == this.maxTrains;
+    }
+
+    public void incrementCurrTrains() {
+        this.curTrains++;
+    }
+
+    public void decrementCurrTrains() {
+        this.curTrains--;
+    }
+
 }

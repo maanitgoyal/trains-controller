@@ -5,6 +5,7 @@ import java.util.List;
 
 import unsw.exceptions.InvalidRouteException;
 import unsw.response.models.*;
+import unsw.utils.Position;
 
 /**
  * The controller for the Trains system.
@@ -59,7 +60,7 @@ public class TrainsController {
     public TrainInfoResponse getTrainInfo(String trainId) {
         for (Train t : trains) {
             if (t.getTrainId().equals(trainId)) {
-                return new TrainInfoResponse(trainId, t.getLocation(), t.getType(), t.getTrainCoordinates());
+                return new TrainInfoResponse(trainId, t.getLocation(), t.getType(), t.getTrainPosition());
             }
         }
         return null;
@@ -85,7 +86,26 @@ public class TrainsController {
     }
 
     public void simulate() {
-        // Todo: Task bi
+        this.trains.sort((t1, t2) -> t1.getTrainId().compareTo(t2.getTrainId()));
+        for (Train t : trains) {
+            int last = t.getLastIndex();
+            if (last == t.getRoute().size() - 1) continue;
+            last++;
+            String stationId = t.getRoute().get(last);
+            Station st = t.findStation(this.stations, stationId);
+
+            if (st.checkIfStationIsFull()) continue;
+
+            Position destination = st.getStationCoordinates();
+            Position currentTrainPosition = t.getTrainPosition();
+
+            if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
+                t.setTrainPosition(destination);
+                t.setLastIndex(last);
+                continue;
+            }
+            t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));
+        }
     }
 
     /**
