@@ -28,7 +28,7 @@ public class TrainsController {
 
     public void createTrain(String trainId, String type, String stationId, List<String> route)
             throws InvalidRouteException {
-        Train t = new Train(trainId, type, stationId, route, this.tracks);
+        Train t = new Train(trainId, type, stationId, route, this.tracks, this.stations);
         trains.add(t);
     }
 
@@ -57,17 +57,30 @@ public class TrainsController {
     }
 
     public TrainInfoResponse getTrainInfo(String trainId) {
-        // Todo: Task avii
+        for (Train t : trains) {
+            if (t.getTrainId().equals(trainId)) {
+                return new TrainInfoResponse(trainId, t.getLocation(), t.getType(), t.getTrainCoordinates());
+            }
+        }
         return null;
     }
 
     public StationInfoResponse getStationInfo(String stationId) {
-        // Todo: Task aviii
+        for (Station station : stations) {
+            if (station.getStationId().equals(stationId)) {
+                return new StationInfoResponse(stationId, station.getStationType(), station.getStationCoordinates());
+            }
+        }
         return null;
     }
 
     public TrackInfoResponse getTrackInfo(String trackId) {
-        // Todo: Task aix
+        for (Track tr : tracks) {
+            if (tr.getTrackId().equals(trackId)) {
+                return new TrackInfoResponse(trackId, tr.getFromStationId(),
+                tr.getToStationId(), tr.getTrackType(), tr.getDurability());
+            }
+        }
         return null;
     }
 

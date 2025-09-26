@@ -7,4 +7,4 @@ I have completed the Station.java file anbd I hope it fulfills all the requireme
 
 Day 2- 26-09-2025
 I have started Train.java but I am not able to figure out how to check if a route is circular or not. 
-Update - I have made a function in Train.java for checking this. The function will use list of tracks which is in TrainsController.java and will check for a track between two stations based on that.
+Update - I have made a function in Train.java for checking this. The function will use list of tracks which is in TrainsController.java and will check for a track between two stations based on that. I have completed Task A. It wasn't that hard.

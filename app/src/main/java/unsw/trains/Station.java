@@ -51,4 +51,8 @@ public class Station extends Position{
     public String getStationType() {
         return type;
     }
+
+    public Position getStationCoordinates() {
+        return new Position(this.getX(), this.getY());
+    }
 }

@@ -22,10 +22,18 @@ public class Track {
     }
 
     public String getFromStationId() {
-        return fromStationId;
+        return this.fromStationId;
     }
 
     public String getToStationId() {
-        return toStationId;
+        return this.toStationId;
+    }
+
+    public TrackType getTrackType() {
+        return this.trackType;
+    }
+
+    public int getDurability() {
+        return this.durability;
     }
 }
