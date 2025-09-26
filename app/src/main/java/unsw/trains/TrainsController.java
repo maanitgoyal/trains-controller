@@ -89,19 +89,26 @@ public class TrainsController {
         this.trains.sort((t1, t2) -> t1.getTrainId().compareTo(t2.getTrainId()));
         for (Train t : trains) {
             int last = t.getLastIndex();
-            if (last == t.getRoute().size() - 1) continue;
-            last++;
-            String stationId = t.getRoute().get(last);
-            Station st = t.findStation(this.stations, stationId);
+            int routeSize = t.getRoute().size();
 
-            if (st.checkIfStationIsFull()) continue;
+            if (last == routeSize - 1 && !t.isCircular()) continue;
+            int cur = (last == routeSize - 1 && t.isCircular()) ? 0 : last + 1;
 
-            Position destination = st.getStationCoordinates();
+            String stationIdCur = t.getRoute().get(last);
+            Station stationCur = t.findStation(stations, stationIdCur);
+            String stationIdFinal = t.getRoute().get(cur);
+            Station stationFinal = t.findStation(this.stations, stationIdFinal);
+
+            if (stationFinal.checkIfStationIsFull()) continue;
+
+            Position destination = stationFinal.getStationCoordinates();
             Position currentTrainPosition = t.getTrainPosition();
+            stationCur.decrementCurrTrains();
 
             if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
                 t.setTrainPosition(destination);
-                t.setLastIndex(last);
+                t.setLastIndex(cur);
+                stationFinal.incrementCurrTrains();
                 continue;
             }
             t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));

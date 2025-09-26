@@ -16,7 +16,6 @@ public class Train {
     private int load;
     private boolean passengers;
     private boolean cargo;
-    private boolean linearRoute;
     private boolean circularRoute;
     private Position position;
     private String location;
@@ -40,7 +39,6 @@ public class Train {
                 this.passengers = true;
                 this.cargo = false;
                 this.load = 3500;
-                this.linearRoute = true;
                 this.circularRoute = false;
                 break;
             case "CargoTrain":
@@ -51,7 +49,6 @@ public class Train {
                 this.passengers = false;
                 this.cargo = true;
                 this.load = 5000;
-                this.linearRoute = true;
                 this.circularRoute = false;
                 break;
             case "BulletTrain":
@@ -59,7 +56,6 @@ public class Train {
                 this.passengers = true;
                 this.cargo = true;
                 this.load = 5000;
-                this.linearRoute = true;
                 this.circularRoute = true;
                 break;
             default:
@@ -119,7 +115,11 @@ public class Train {
     }
 
     public double getSpeed() {
-        return speed;
+        return this.speed;
+    }
+
+    public boolean isCircular() {
+        return this.circularRoute;
     }
 
 }
