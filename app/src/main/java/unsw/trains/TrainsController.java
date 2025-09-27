@@ -60,7 +60,8 @@ public class TrainsController {
     public TrainInfoResponse getTrainInfo(String trainId) {
         for (Train t : trains) {
             if (t.getTrainId().equals(trainId)) {
-                return new TrainInfoResponse(trainId, t.getLocation(), t.getType(), t.getTrainPosition());
+                return new TrainInfoResponse(trainId, t.getLocation(), t.getType(), t.getTrainPosition(),
+                t.getLoadInfoResponsesOfTrain());
             }
         }
         return null;
@@ -69,7 +70,7 @@ public class TrainsController {
     public StationInfoResponse getStationInfo(String stationId) {
         for (Station station : stations) {
             if (station.getStationId().equals(stationId)) {
-                return new StationInfoResponse(stationId, station.getStationType(), station.getStationCoordinates());
+                return new StationInfoResponse(stationId, station.getStationType(), station.getStationCoordinates(), station.getLoadInfoResponsesofStation(), new ArrayList<>());
             }
         }
         return null;
@@ -104,11 +105,14 @@ public class TrainsController {
             Position destination = stationFinal.getStationCoordinates();
             Position currentTrainPosition = t.getTrainPosition();
             stationCur.decrementCurrTrains();
-
+            t.decreaseTrainSpeed();
+            
             if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
                 t.setTrainPosition(destination);
                 t.setLastIndex(cur);
                 stationFinal.incrementCurrTrains();
+                Helper.simulateLoadDisembark(stationFinal, t);
+                Helper.simulateLoadEmbark(stationFinal, t);
                 continue;
             }
             t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));
@@ -126,11 +130,17 @@ public class TrainsController {
     }
 
     public void createPassenger(String startStationId, String destStationId, String passengerId) {
-        // Todo: Task bii
+        Load ld = new Load(startStationId, destStationId, passengerId, "Passenger", 70, stations);
+        Station st = Helper.findStation(stations, startStationId);
+        st.addLoadToStation(ld);
+        st.addLoadInfoResponseToStation(new LoadInfoResponse(passengerId, "Passenger"));
     }
 
     public void createCargo(String startStationId, String destStationId, String cargoId, int weight) {
-        // Todo: Task bii
+        Load ld = new Load(startStationId, destStationId, cargoId, "Cargo", weight, stations);
+        Station st = Helper.findStation(stations, startStationId);
+        st.addLoadToStation(ld);
+        st.addLoadInfoResponseToStation(new LoadInfoResponse(cargoId, "Cargo"));
     }
 
     public void createPerishableCargo(String startStationId, String destStationId, String cargoId, int weight,

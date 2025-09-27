@@ -43,7 +43,6 @@ public class TaskBExampleTests {
     }
 
     @Test
-    @Disabled // Remove the "@Disabled" annotation to enable the test.
     public void testCreateDifferentPassengersAndCargo() {
         TrainsController controller = new TrainsController();
         controller.createStation("s1", "PassengerStation", 0, 0);
@@ -68,7 +67,6 @@ public class TaskBExampleTests {
     }
 
     @Test
-    @Disabled // Remove the "@Disabled" annotation to enable the test.
     public void testTrainPicksUpPassenger() {
         TrainsController controller = new TrainsController();
         controller.createStation("s1", "PassengerStation", 0, 0);

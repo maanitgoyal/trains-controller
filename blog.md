@@ -16,3 +16,12 @@ This is a really big task. A lot of stuff is happening at once . I am starting w
 I just found out that I missed checking for circular routes in simulate function. I have added that now. I also forgot to increment and decrement the current amount of trains, I have done that now. Used ternary operator to use cur index which will help in that.
 Now for task bii, i am figuring out how to check for loads and passengers. Probably have to make few classes.
 I have created Passenger.java and Cargo.java for storing passenger and cargo info. I feel like i need to find station in lot of classes so I am gonna make a helper file for that.
+
+Day 2 - 27-09-2025
+For task bii, i need several functions for different conditions. I need functions for:
+
+i - Function to decrease the train load when cargo and passengers disembark
+ii - Function to increase the train load. For this i also need a function to see if the train has the destination station in its route.
+
+I have created two classes for passenger and cargo. But I need to change it to Load.java. I am figuring out how to add all this stuff in simulate() function. In the meantime, i have added some functions in train.java and station.java.
+I have made a function in Helper.java to simulate the embark criteria of the load and now i'll figure out disembark. I have done that as well. So with this, my main functionality is done and now i need to add LoadInfoResponses to both Train.java and Station.java. I am almost there just need to figure out how i am gonna add the cargo to the train for the first ever simulate because my program is not taking that into account.

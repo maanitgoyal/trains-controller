@@ -1,5 +1,9 @@
 package unsw.trains;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import unsw.response.models.LoadInfoResponse;
 import unsw.utils.Position;
 
 public class Station extends Position {
@@ -9,6 +13,8 @@ public class Station extends Position {
     private double passengers;
     private double cargo;
     private int curTrains;
+    private List<Load> loads = new ArrayList<>();
+    private List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
 
     public void setType(String t) {
         switch (t) {
@@ -74,4 +80,42 @@ public class Station extends Position {
         this.curTrains--;
     }
 
+    public boolean canPassengersBeOnThisStation() {
+        return this.passengers == Double.POSITIVE_INFINITY;
+    }
+
+    public boolean canCargoBeOnThisStation() {
+        return this.cargo == Double.POSITIVE_INFINITY;
+    }
+
+    public void addLoadToStation(Load ld) {
+        this.loads.add(ld);
+    }
+
+    public void delLoadFromStation(Load ld) {
+        for (Load load : loads) {
+            if (load.getLoadId().equals(ld.getLoadId())) this.loads.remove(ld);
+        }
+    }
+
+    public List<Load> getStationLoads() {
+        this.loads.sort((l1, l2) -> l1.getLoadId().compareTo(l2.getLoadId()));
+        return this.loads; 
+    }
+
+    public List<LoadInfoResponse> getLoadInfoResponsesofStation() {
+        return this.loadInfoResponses;
+    }
+
+    public void addLoadInfoResponseToStation(LoadInfoResponse lir) {
+        this.loadInfoResponses.add(lir);
+    }
+
+    public void delLoadInfoResponseFromStation(LoadInfoResponse lir) {
+        for (LoadInfoResponse load : loadInfoResponses) {
+            if (load.getLoadId().equals(lir.getLoadId())) {
+                this.loadInfoResponses.remove(lir);
+            }
+        }
+    }
 }

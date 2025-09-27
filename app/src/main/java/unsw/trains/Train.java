@@ -2,9 +2,9 @@ package unsw.trains;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import unsw.exceptions.InvalidRouteException;
+import unsw.response.models.LoadInfoResponse;
 import unsw.utils.Position;
 
 public class Train {
@@ -13,12 +13,14 @@ public class Train {
     private int lastIndex;
     private List<String> route = new ArrayList<>();
     private double speed;
-    private int load;
+    private int maxLoad;
     private boolean passengers;
     private boolean cargo;
     private boolean circularRoute;
     private Position position;
     private String location;
+    private List<Load> loads = new ArrayList<>();
+    private List<LoadInfoResponse> loadsInfoResponses = new ArrayList<>();
 
     public boolean isRouteValid(List<Track> tracks, String st1, String st2) {
         if (tracks.size() < 3) return false;
@@ -38,7 +40,7 @@ public class Train {
                 this.speed = 2;
                 this.passengers = true;
                 this.cargo = false;
-                this.load = 3500;
+                this.maxLoad = 3500;
                 this.circularRoute = false;
                 break;
             case "CargoTrain":
@@ -48,14 +50,14 @@ public class Train {
                 this.speed = 3;
                 this.passengers = false;
                 this.cargo = true;
-                this.load = 5000;
+                this.maxLoad = 5000;
                 this.circularRoute = false;
                 break;
             case "BulletTrain":
                 this.speed = 5;
                 this.passengers = true;
                 this.cargo = true;
-                this.load = 5000;
+                this.maxLoad = 5000;
                 this.circularRoute = true;
                 break;
             default:
@@ -114,5 +116,57 @@ public class Train {
     public boolean isCircular() {
         return this.circularRoute;
     }
+    
+    public void addLoadToTrain(Load ld) {
+        this.loads.add(ld);
+    }
 
+    public void delLoadFromTrain(Load ld) {
+        for (Load load : loads) {
+            if (load.getLoadId().equals(ld.getLoadId())) this.loads.remove(ld);
+            break;
+        }
+    }
+
+    public int getMaxTrainLoad() {
+        return this.maxLoad;
+    }
+
+    public List<Load> getTrainLoads() {
+        return loads;
+    }
+
+    public boolean canPassengersBeOnThisTrain() {
+        return this.passengers;
+    }
+
+    public boolean canCargoBeOnThisTrain() {
+        return this.cargo;
+    }
+
+    public int getLoadWeightOfTrain() {
+        int s = 0;
+        for (Load load : loads) s += load.getLoadWeight();
+        return s;
+    }
+
+    public void decreaseTrainSpeed() {
+        this.speed *= (1 - ((this.getLoadWeightOfTrain()) * 0.01) / 100);
+    }
+
+    public List<LoadInfoResponse> getLoadInfoResponsesOfTrain() {
+        return this.loadsInfoResponses;
+    }
+
+    public void addLoadInfoResponseToTrain(LoadInfoResponse lir) {
+        this.loadsInfoResponses.add(lir);
+    }
+
+    public void delLoadInfoResponseFromTrain(LoadInfoResponse lir) {
+        for (LoadInfoResponse load : loadsInfoResponses) {
+            if (load.getLoadId().equals(lir.getLoadId())) {
+                this.loadsInfoResponses.remove(lir);
+            }
+        }
+    }
 }
