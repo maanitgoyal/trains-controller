@@ -134,6 +134,10 @@ public class TrainsController {
         Station st = Helper.findStation(stations, startStationId);
         st.addLoadToStation(ld);
         st.addLoadInfoResponseToStation(new LoadInfoResponse(passengerId, "Passenger"));
+        List<Train> tr = Helper.trainsOnStation(trains, st);
+        for (Train train : tr) {
+            Helper.simulateLoadEmbark(st, train);
+        }
     }
 
     public void createCargo(String startStationId, String destStationId, String cargoId, int weight) {
@@ -141,6 +145,10 @@ public class TrainsController {
         Station st = Helper.findStation(stations, startStationId);
         st.addLoadToStation(ld);
         st.addLoadInfoResponseToStation(new LoadInfoResponse(cargoId, "Cargo"));
+        List<Train> tr = Helper.trainsOnStation(trains, st);
+        for (Train train : tr) {
+            Helper.simulateLoadEmbark(st, train);
+        }
     }
 
     public void createPerishableCargo(String startStationId, String destStationId, String cargoId, int weight,
