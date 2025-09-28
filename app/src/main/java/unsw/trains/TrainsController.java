@@ -118,6 +118,7 @@ public class TrainsController {
                 continue;
             }
             t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));
+            t.removeExpiredCargo();
         }
     }
 

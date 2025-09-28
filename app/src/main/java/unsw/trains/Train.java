@@ -162,4 +162,16 @@ public class Train {
         }
         return this.loadInfoResponses;
     }
+
+    public void removeExpiredCargo() {
+        List<Load> loads = this.getTrainLoads();
+        for (Load load : loads) {
+            if (load.getLoadType().equals("PerishableCargo")) {
+                if (load.getMinsTillPerished() == 0) this.delLoadFromTrain(load);
+                Position cor = this.getTrainPosition();
+                load.setLoadCurrPosition(cor);
+                load.decMinsTillPerished();
+            };
+        }
+    }
 }

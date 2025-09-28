@@ -47,6 +47,10 @@ public class Load {
         return this.destStationId;
     }
 
+    public void setLoadCurrPosition(Position newPos) {
+        this.currPosition = newPos;
+    }
+
     public Position getLoadCurrPosition() {
         return new Position(this.currPosition.getX(), this.currPosition.getY());
     }
@@ -79,5 +83,9 @@ public class Load {
         Position cur = this.getLoadCurrPosition();
         if ((cur.distance(st.getStationCoordinates()) / t.getSpeed()) <= this.minsTillPerish) return true;
         return false;
+    }
+
+    public void decMinsTillPerished() {
+        this.minsTillPerish--;
     }
 }
