@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import unsw.response.models.LoadInfoResponse;
+import unsw.response.models.TrainInfoResponse;
 import unsw.utils.Position;
 
 public class Station extends Position {
@@ -15,6 +16,7 @@ public class Station extends Position {
     private int curTrains;
     private List<Load> loads = new ArrayList<>();
     private List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
+    private List<TrainInfoResponse> trainInfoResponses = new ArrayList<>();
 
     public void setType(String t) {
         switch (t) {
@@ -109,5 +111,15 @@ public class Station extends Position {
             this.loadInfoResponses.add(new LoadInfoResponse(ld.getLoadId(), ld.getLoadType()));
         }
         return this.loadInfoResponses;
+    }
+
+    public List<TrainInfoResponse> getTrainInfoResponsesOnStation(List<Train> trains) {
+        List<Train> tr = Helper.trainsOnStation(trains, this);
+        this.trainInfoResponses.clear();
+        for (Train train : tr) {
+            this.trainInfoResponses.add(new TrainInfoResponse(train.getTrainId(),
+            this.getStationId(), train.getType(), train.getTrainPosition(), train.getLoadInfoResponsesOfTrain()));
+        }
+        return this.trainInfoResponses;
     }
 }

@@ -85,4 +85,29 @@ public class TaskBExampleTests {
         assertEquals(0, controller.getStationInfo("s1").getLoads().size());
         assertEquals(List.of(new LoadInfoResponse("p1", "Passenger")), controller.getTrainInfo("train1").getLoads());
     }
+
+    @Test
+    public void testPerishableCargo() {
+        TrainsController controller = new TrainsController();
+        controller.createStation("s1", "CentralStation", 0, 0);
+        controller.createStation("s2", "CentralStation", 0, 50);
+        controller.createStation("s3", "CentralStation", 0, 100);
+        controller.createTrack("t1-2", "s1", "s2");
+        controller.createTrack("t2-3", "s2", "s3");
+        controller.createPerishableCargo("s1", "s3", "c1", 1000, 20);
+        assertDoesNotThrow(() -> {
+            controller.createTrain("train1", "BulletTrain", "s1", List.of("s1", "s2", "s3"));
+        });
+        // Check that the load was created at the station.
+        assertEquals(List.of(new LoadInfoResponse("c1", "PerishableCargo")), controller.getStationInfo("s1").getLoads());
+
+        // After the first tick, the train with id t1 should have picked up the cargo.
+        controller.simulate();
+        assertEquals(0, controller.getStationInfo("s1").getLoads().size());
+        assertEquals(List.of(new LoadInfoResponse("c1", "PerishableCargo")), controller.getTrainInfo("train1").getLoads());
+        controller.simulate(20);
+
+        // Train should not contain any cargo
+        assertEquals(0, controller.getTrainInfo("train1").getLoads().size());
+    }
 }

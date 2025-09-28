@@ -72,7 +72,7 @@ public class TrainsController {
     public StationInfoResponse getStationInfo(String stationId) {
         for (Station station : stations) {
             if (station.getStationId().equals(stationId)) {
-                return new StationInfoResponse(stationId, station.getStationType(), station.getStationCoordinates(), station.getLoadInfoResponsesofStation(), new ArrayList<>());
+                return new StationInfoResponse(stationId, station.getStationType(), station.getStationCoordinates(), station.getLoadInfoResponsesofStation(), station.getTrainInfoResponsesOnStation(trains));
             }
         }
         return null;

@@ -145,7 +145,7 @@ public class Train {
     public int getLoadWeightOfTrain() {
         int s = 0;
         for (Load load : loads) {
-            if (load.getLoadType() == "Cargo") s += load.getLoadWeight();
+            if (load.getLoadType().equals("Cargo") || load.getLoadType().equals("PerishableCargo")) s += load.getLoadWeight();
         }
         return s;
     }
@@ -165,13 +165,20 @@ public class Train {
 
     public void removeExpiredCargo() {
         List<Load> loads = this.getTrainLoads();
+        List<Load> toRemove = new ArrayList<>();
+
         for (Load load : loads) {
             if (load.getLoadType().equals("PerishableCargo")) {
-                if (load.getMinsTillPerished() == 0) this.delLoadFromTrain(load);
-                Position cor = this.getTrainPosition();
-                load.setLoadCurrPosition(cor);
-                load.decMinsTillPerished();
-            };
+                if (load.getMinsTillPerished() == 0) toRemove.add(load);
+                else {
+                    Position cor = this.getTrainPosition();
+                    load.setLoadCurrPosition(cor);
+                    load.decMinsTillPerished();
+                }
+            }
+        }
+        for (Load load : toRemove) {
+            this.delLoadFromTrain(load);
         }
     }
 }
