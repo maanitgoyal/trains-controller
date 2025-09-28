@@ -32,3 +32,8 @@ I figured my bug in my sleep that i am updating LoadInfoResponse in Station and 
 Task biii looks easy. Should not take much time. I forgot to add the functionality for setting load position while simulate. Need to confirm this spec - (including the time it takes to stop at stations).
 I think biii should be good now.
 I have tested my code on the frontend. It's working fine but there is one weird bug. Its called ConcurrentModificationException. The perishablecargo when gets deleted the frontend goes into some error. but when i click simulate again the frontend starts working fine again. So i am gonna write a test now to check if there is some problem with my code or is it the frontend. This error is coming in test as well so I need to do debug it now. Okay i figured it out. I am removing an element using for loop iterator. I cant do that so changing it now. I have made a toRemove array and i delete every element in that array from the main array. biii works perfectly in the frontend as well now.
+
+Blog 3 - Task C
+
+Day 1 - 28-09-2025
+Task C looks pretty easy. It's just a lot of things all together but it shouldn't be that hard. Added isBreakable field in constructor for track. Added a method in Train.java for giving me the total weight of load on the train. Made a method in Helper.java to find a track between two stations.

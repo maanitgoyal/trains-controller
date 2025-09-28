@@ -37,7 +37,7 @@ public class Helper {
         List<Load> loads = st.getStationLoads();
         for (Load load : loads) {
             if (doesTrainReachDestination(t, load) &&
-            (t.getLoadWeightOfTrain() + load.getLoadWeight()) <= t.getMaxTrainLoad() &&
+            (t.getCargoWeightOfTrain() + load.getLoadWeight()) <= t.getMaxTrainLoad() &&
             !load.hasLoadReachedDestination() && load.getLoadTrainAssigned() == null) {
                 
                 boolean can = false;
@@ -56,6 +56,14 @@ public class Helper {
         }
     }
 
+    public static boolean isThereATrack(List<Track> tracks, String st1, String st2) {
+        for (Track track : tracks) {
+            if ((track.getFromStationId().equals(st1) && track.getToStationId().equals(st2))
+            || (track.getFromStationId().equals(st2) && track.getToStationId().equals(st1))) return true;
+        }
+        return false;
+    }
+
     public static List<Train> trainsOnStation(List<Train> trains, Station st) {
         List<Train> res = new ArrayList<>();
         for (Train train : trains) {
@@ -63,5 +71,9 @@ public class Helper {
         }
         res.sort((t1, t2) -> t1.getTrainId().compareTo(t2.getTrainId()));
         return res;
+    }
+
+    public static void trackSimulator(Train t, Track track) {
+
     }
 }

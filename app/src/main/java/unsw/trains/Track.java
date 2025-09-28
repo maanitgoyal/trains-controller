@@ -8,13 +8,15 @@ public class Track {
     private String toStationId;
     private int durability;
     private TrackType trackType;
+    private boolean isBreakable;
 
-    public Track(String trackId, String fromStationId, String toStationId) {
+    public Track(String trackId, String fromStationId, String toStationId, boolean isBreakable) {
         this.trackId = trackId;
         this.fromStationId = fromStationId;
         this.toStationId = toStationId;
         this.durability = 10;
-        this.trackType = TrackType.NORMAL;
+        this.isBreakable = isBreakable;
+        this.trackType = (!isBreakable) ? TrackType.NORMAL : TrackType.UNBROKEN;
     }
 
     public String getTrackId() {
@@ -35,5 +37,17 @@ public class Track {
 
     public int getDurability() {
         return this.durability;
+    }
+
+    public void decDurabilityOfTrack(int dec) {
+        this.durability -= dec;
+    }
+
+    public void incDurabilityOfTrack(int inc) {
+        this.durability += inc;
+    }
+
+    public boolean isTrackBreakable() {
+        return this.isBreakable;
     }
 }

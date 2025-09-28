@@ -24,17 +24,13 @@ public class Train {
 
     public boolean isRouteValid(List<Track> tracks, String st1, String st2) {
         if (tracks.size() < 3) return false;
-        for (Track track : tracks) {
-            if (track.getFromStationId().equals(st1) &&
-            track.getToStationId().equals(st2)) return true;
-        }
-        return false;
+        return Helper.isThereATrack(tracks, st1, st2);
     }
 
     public void setType(String type, List<Track> tracks, String st1, String st2) throws InvalidRouteException {
         switch (type) {
             case "PassengerTrain":
-                if (isRouteValid(tracks, st1, st2) || isRouteValid(tracks, st2, st1)) {
+                if (isRouteValid(tracks, st1, st2)) {
                     throw new InvalidRouteException("Invalid Route!");
                 }
                 this.speed = 2;
@@ -142,7 +138,13 @@ public class Train {
         return this.cargo;
     }
 
-    public int getLoadWeightOfTrain() {
+    public int getTotalLoadWeightOfTrain() {
+        int s = 0;
+        for (Load load: loads) s += load.getLoadWeight();
+        return s;
+    }
+
+    public int getCargoWeightOfTrain() {
         int s = 0;
         for (Load load : loads) {
             if (load.getLoadType().equals("Cargo") || load.getLoadType().equals("PerishableCargo")) s += load.getLoadWeight();
@@ -151,7 +153,7 @@ public class Train {
     }
 
     public void decreaseTrainSpeed() {
-        this.speed *= (1 - ((this.getLoadWeightOfTrain()) * 0.01) / 100);
+        this.speed *= (1 - ((this.getCargoWeightOfTrain()) * 0.01) / 100);
     }
 
     public List<LoadInfoResponse> getLoadInfoResponsesOfTrain() {

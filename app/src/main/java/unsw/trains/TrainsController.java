@@ -25,7 +25,7 @@ public class TrainsController {
     }
 
     public void createTrack(String trackId, String fromStationId, String toStationId) {
-        Track tr = new Track(trackId, fromStationId, toStationId);
+        Track tr = new Track(trackId, fromStationId, toStationId, false);
         tracks.add(tr);
     }
 
