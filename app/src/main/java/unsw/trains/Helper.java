@@ -43,6 +43,8 @@ public class Helper {
                 boolean can = false;
                 if (load.getLoadType().equals("Passenger") && t.canPassengersBeOnThisTrain()) can = true;
                 else if (load.getLoadType().equals("Cargo") && t.canCargoBeOnThisTrain()) can = true;
+                else if (load.getLoadType().equals("PerishableCargo")
+                && t.canCargoBeOnThisTrain() && load.shouldPerishableBeEmbarked(t, st)) can = true; 
 
                 if (can) {
                     t.addLoadToTrain(load);
@@ -61,5 +63,14 @@ public class Helper {
         }
         res.sort((t1, t2) -> t1.getTrainId().compareTo(t2.getTrainId()));
         return res;
+    }
+
+    public static void removeExpiredCargo(Train t) {
+        List<Load> loads = t.getTrainLoads();
+        for (Load load : loads) {
+            if (load.getLoadType().equals("PerishableCargo")) {
+                // to do- take train coordinates and use embark logic to see if it should be removed or not
+            };
+        }
     }
 }

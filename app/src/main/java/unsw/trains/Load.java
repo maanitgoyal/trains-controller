@@ -11,7 +11,10 @@ public class Load {
     private Position currPosition;
     private int weight;
     private String trainAssigned = null;
-    private boolean hasReachedDestination;
+    private boolean hasReachedDestination; // void - should be removed in the end.
+    private int minsTillPerish;
+
+    // add the functionality for setting load position while simulate.
 
     public Load(String startStationId, String destStationId, String loadId, String loadType, int weight, List<Station> stations) {
         this.destStationId = destStationId;
@@ -20,6 +23,16 @@ public class Load {
         this.currPosition = Helper.findStation(stations, startStationId).getStationCoordinates();
         this.weight = weight;
         this.hasReachedDestination = false;
+    }
+
+    public Load(String startStationId, String destStationId, String loadId, String loadType, int weight, int minsTillPerish, List<Station> stations) {
+        this.destStationId = destStationId;
+        this.loadId = loadId;
+        this.loadType = loadType;
+        this.currPosition = Helper.findStation(stations, startStationId).getStationCoordinates();
+        this.weight = weight;
+        this.hasReachedDestination = false;
+        this.minsTillPerish = minsTillPerish;
     }
 
     public String getLoadId() {
@@ -56,5 +69,15 @@ public class Load {
     
     public boolean hasLoadReachedDestination() {
         return this.hasReachedDestination;
+    }
+
+    public int getMinsTillPerished() {
+        return this.minsTillPerish;
+    }
+
+    public boolean shouldPerishableBeEmbarked(Train t, Station st) {
+        Position cur = this.getLoadCurrPosition();
+        if ((cur.distance(st.getStationCoordinates()) / t.getSpeed()) <= this.minsTillPerish) return true;
+        return false;
     }
 }

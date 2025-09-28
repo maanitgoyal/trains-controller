@@ -104,12 +104,11 @@ public class TrainsController {
 
             if (stationFinal.checkIfStationIsFull()) continue;
 
-            Helper.simulateLoadEmbark(stationCur, t);
-
             Position destination = stationFinal.getStationCoordinates();
             Position currentTrainPosition = t.getTrainPosition();
             stationCur.decrementCurrTrains();
             t.decreaseTrainSpeed();
+            Helper.simulateLoadEmbark(stationCur, t);
 
             if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
                 t.setTrainPosition(destination);
@@ -146,7 +145,9 @@ public class TrainsController {
 
     public void createPerishableCargo(String startStationId, String destStationId, String cargoId, int weight,
             int minsTillPerish) {
-        // Todo: Task biii
+        Load ld = new Load(startStationId, destStationId, cargoId, "PerishableCargo", weight, minsTillPerish, stations);
+        Station st = Helper.findStation(stations, startStationId);
+        st.addLoadToStation(ld);
     }
 
     public void createTrack(String trackId, String fromStationId, String toStationId, boolean isBreakable) {

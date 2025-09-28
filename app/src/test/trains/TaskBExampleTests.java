@@ -82,7 +82,7 @@ public class TaskBExampleTests {
 
         // After the first tick, the train with id t1 should have picked up the passenger.
         controller.simulate();
-        // assertEquals(0, controller.getStationInfo("s1").getLoads().size());
+        assertEquals(0, controller.getStationInfo("s1").getLoads().size());
         assertEquals(List.of(new LoadInfoResponse("p1", "Passenger")), controller.getTrainInfo("train1").getLoads());
     }
 }
