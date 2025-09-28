@@ -20,7 +20,7 @@ public class Train {
     private Position position;
     private String location;
     private List<Load> loads = new ArrayList<>();
-    private List<LoadInfoResponse> loadsInfoResponses = new ArrayList<>();
+    private List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
 
     public boolean isRouteValid(List<Track> tracks, String st1, String st2) {
         if (tracks.size() < 3) return false;
@@ -122,10 +122,8 @@ public class Train {
     }
 
     public void delLoadFromTrain(Load ld) {
-        for (Load load : loads) {
-            if (load.getLoadId().equals(ld.getLoadId())) this.loads.remove(ld);
-            break;
-        }
+        if (loads.size() == 0) return;
+        loads.removeIf(load -> load.getLoadId().equals(ld.getLoadId()));
     }
 
     public int getMaxTrainLoad() {
@@ -146,7 +144,9 @@ public class Train {
 
     public int getLoadWeightOfTrain() {
         int s = 0;
-        for (Load load : loads) s += load.getLoadWeight();
+        for (Load load : loads) {
+            if (load.getLoadType() == "Cargo") s += load.getLoadWeight();
+        }
         return s;
     }
 
@@ -155,18 +155,11 @@ public class Train {
     }
 
     public List<LoadInfoResponse> getLoadInfoResponsesOfTrain() {
-        return this.loadsInfoResponses;
-    }
-
-    public void addLoadInfoResponseToTrain(LoadInfoResponse lir) {
-        this.loadsInfoResponses.add(lir);
-    }
-
-    public void delLoadInfoResponseFromTrain(LoadInfoResponse lir) {
-        for (LoadInfoResponse load : loadsInfoResponses) {
-            if (load.getLoadId().equals(lir.getLoadId())) {
-                this.loadsInfoResponses.remove(lir);
-            }
+        this.loads.sort((l1, l2) -> l1.getLoadId().compareTo(l2.getLoadId()));
+        this.loadInfoResponses.clear();
+        for (Load ld : this.loads) {
+            this.loadInfoResponses.add(new LoadInfoResponse(ld.getLoadId(), ld.getLoadType()));
         }
+        return this.loadInfoResponses;
     }
 }

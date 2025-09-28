@@ -93,9 +93,8 @@ public class Station extends Position {
     }
 
     public void delLoadFromStation(Load ld) {
-        for (Load load : loads) {
-            if (load.getLoadId().equals(ld.getLoadId())) this.loads.remove(ld);
-        }
+        if (loads.size() == 0) return;
+        loads.removeIf(load -> load.getLoadId().equals(ld.getLoadId()));
     }
 
     public List<Load> getStationLoads() {
@@ -104,18 +103,11 @@ public class Station extends Position {
     }
 
     public List<LoadInfoResponse> getLoadInfoResponsesofStation() {
-        return this.loadInfoResponses;
-    }
-
-    public void addLoadInfoResponseToStation(LoadInfoResponse lir) {
-        this.loadInfoResponses.add(lir);
-    }
-
-    public void delLoadInfoResponseFromStation(LoadInfoResponse lir) {
-        for (LoadInfoResponse load : loadInfoResponses) {
-            if (load.getLoadId().equals(lir.getLoadId())) {
-                this.loadInfoResponses.remove(lir);
-            }
+        this.loads.sort((l1, l2) -> l1.getLoadId().compareTo(l2.getLoadId()));
+        this.loadInfoResponses.clear();
+        for (Load ld : this.loads) {
+            this.loadInfoResponses.add(new LoadInfoResponse(ld.getLoadId(), ld.getLoadType()));
         }
+        return this.loadInfoResponses;
     }
 }

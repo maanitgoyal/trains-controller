@@ -17,6 +17,8 @@ public class TrainsController {
     List<Station> stations = new ArrayList<>();
     List<Track> tracks = new ArrayList<>();
     List<Train> trains = new ArrayList<>();
+    // boolean firstSim = false;
+
     public void createStation(String stationId, String type, double x, double y) {
         Station st = new Station(stationId, type, x, y);
         stations.add(st);
@@ -102,17 +104,18 @@ public class TrainsController {
 
             if (stationFinal.checkIfStationIsFull()) continue;
 
+            Helper.simulateLoadEmbark(stationCur, t);
+
             Position destination = stationFinal.getStationCoordinates();
             Position currentTrainPosition = t.getTrainPosition();
             stationCur.decrementCurrTrains();
             t.decreaseTrainSpeed();
-            
+
             if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
                 t.setTrainPosition(destination);
                 t.setLastIndex(cur);
                 stationFinal.incrementCurrTrains();
                 Helper.simulateLoadDisembark(stationFinal, t);
-                Helper.simulateLoadEmbark(stationFinal, t);
                 continue;
             }
             t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));
@@ -133,22 +136,12 @@ public class TrainsController {
         Load ld = new Load(startStationId, destStationId, passengerId, "Passenger", 70, stations);
         Station st = Helper.findStation(stations, startStationId);
         st.addLoadToStation(ld);
-        st.addLoadInfoResponseToStation(new LoadInfoResponse(passengerId, "Passenger"));
-        List<Train> tr = Helper.trainsOnStation(trains, st);
-        for (Train train : tr) {
-            Helper.simulateLoadEmbark(st, train);
-        }
     }
 
     public void createCargo(String startStationId, String destStationId, String cargoId, int weight) {
         Load ld = new Load(startStationId, destStationId, cargoId, "Cargo", weight, stations);
         Station st = Helper.findStation(stations, startStationId);
         st.addLoadToStation(ld);
-        st.addLoadInfoResponseToStation(new LoadInfoResponse(cargoId, "Cargo"));
-        List<Train> tr = Helper.trainsOnStation(trains, st);
-        for (Train train : tr) {
-            Helper.simulateLoadEmbark(st, train);
-        }
     }
 
     public void createPerishableCargo(String startStationId, String destStationId, String cargoId, int weight,
