@@ -1,6 +1,7 @@
 package unsw.trains;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import unsw.response.models.LoadInfoResponse;
@@ -95,8 +96,16 @@ public class Station extends Position {
     }
 
     public void delLoadFromStation(Load ld) {
-        if (loads.size() == 0) return;
-        loads.removeIf(load -> load.getLoadId().equals(ld.getLoadId()));
+        if (loads.isEmpty()) return;
+
+        Iterator<Load> it = loads.iterator();
+        while (it.hasNext()) {
+            Load load = it.next();
+            if (load.getLoadId().equals(ld.getLoadId())) {
+                it.remove();
+                break;
+            }
+        }
     }
 
     public List<Load> getStationLoads() {

@@ -6,6 +6,7 @@ import java.util.List;
 import unsw.exceptions.InvalidRouteException;
 import unsw.response.models.*;
 import unsw.utils.Position;
+import unsw.utils.TrackType;
 
 /**
  * The controller for the Trains system.
@@ -103,17 +104,23 @@ public class TrainsController {
             Station stationFinal = Helper.findStation(this.stations, stationIdFinal);
 
             if (stationFinal.checkIfStationIsFull()) continue;
+            Track track = Helper.isThereATrack(tracks, stationIdCur, stationIdFinal);
+            if (track != null && track.getTrackType() == TrackType.BROKEN) {
+                // do stuff in cii.
+                continue;
+            };
 
             Position destination = stationFinal.getStationCoordinates();
             Position currentTrainPosition = t.getTrainPosition();
-            stationCur.decrementCurrTrains();
+            stationCur.decrementCurrTrains(); // i think this is void
             t.decreaseTrainSpeed();
             Helper.simulateLoadEmbark(stationCur, t);
-
+            
             if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
                 t.setTrainPosition(destination);
                 t.setLastIndex(cur);
-                stationFinal.incrementCurrTrains();
+                stationFinal.incrementCurrTrains(); // i think this is void
+                Helper.trackSimulator(t, track);
                 Helper.simulateLoadDisembark(stationFinal, t);
                 continue;
             }
@@ -152,7 +159,8 @@ public class TrainsController {
     }
 
     public void createTrack(String trackId, String fromStationId, String toStationId, boolean isBreakable) {
-        // Todo: Task ci
+        Track t = new Track(trackId, fromStationId, toStationId, isBreakable);
+        tracks.add(t);
     }
 
     public void createPassenger(String startStationId, String destStationId, String passengerId, boolean isMechanic) {

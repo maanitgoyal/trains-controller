@@ -31,6 +31,10 @@ public class Track {
         return this.toStationId;
     }
 
+    public void setTrackType(TrackType type) {
+        this.trackType = type;
+    }
+
     public TrackType getTrackType() {
         return this.trackType;
     }
@@ -40,6 +44,7 @@ public class Track {
     }
 
     public void decDurabilityOfTrack(int dec) {
+        if (this.durability == 0) return;
         this.durability -= dec;
     }
 

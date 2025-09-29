@@ -1,6 +1,7 @@
 package unsw.trains;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import unsw.exceptions.InvalidRouteException;
@@ -24,7 +25,7 @@ public class Train {
 
     public boolean isRouteValid(List<Track> tracks, String st1, String st2) {
         if (tracks.size() < 3) return false;
-        return Helper.isThereATrack(tracks, st1, st2);
+        return Helper.isThereATrack(tracks, st1, st2) != null;
     }
 
     public void setType(String type, List<Track> tracks, String st1, String st2) throws InvalidRouteException {
@@ -118,8 +119,16 @@ public class Train {
     }
 
     public void delLoadFromTrain(Load ld) {
-        if (loads.size() == 0) return;
-        loads.removeIf(load -> load.getLoadId().equals(ld.getLoadId()));
+        if (loads.isEmpty()) return;
+
+        Iterator<Load> it = loads.iterator();
+        while (it.hasNext()) {
+            Load load = it.next();
+            if (load.getLoadId().equals(ld.getLoadId())) {
+                it.remove();
+                break;
+            }
+        }
     }
 
     public int getMaxTrainLoad() {
@@ -166,21 +175,18 @@ public class Train {
     }
 
     public void removeExpiredCargo() {
-        List<Load> loads = this.getTrainLoads();
-        List<Load> toRemove = new ArrayList<>();
-
-        for (Load load : loads) {
+        Iterator<Load> it = loads.iterator();
+        while (it.hasNext()) {
+            Load load = it.next();
             if (load.getLoadType().equals("PerishableCargo")) {
-                if (load.getMinsTillPerished() == 0) toRemove.add(load);
-                else {
+                if (load.getMinsTillPerished() == 0) {
+                    it.remove();
+                } else {
                     Position cor = this.getTrainPosition();
                     load.setLoadCurrPosition(cor);
                     load.decMinsTillPerished();
                 }
             }
-        }
-        for (Load load : toRemove) {
-            this.delLoadFromTrain(load);
         }
     }
 }
