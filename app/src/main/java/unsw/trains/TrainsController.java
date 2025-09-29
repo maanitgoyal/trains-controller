@@ -113,8 +113,8 @@ public class TrainsController {
             Position destination = stationFinal.getStationCoordinates();
             Position currentTrainPosition = t.getTrainPosition();
             stationCur.decrementCurrTrains(); // i think this is void
-            t.decreaseTrainSpeed();
             Helper.simulateLoadEmbark(stationCur, t);
+            t.decreaseTrainSpeed();
             
             if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
                 t.setTrainPosition(destination);
