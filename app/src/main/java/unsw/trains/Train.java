@@ -14,6 +14,7 @@ public class Train {
     private int lastIndex;
     private List<String> route = new ArrayList<>();
     private double speed;
+    private double originalSpeed;
     private int maxLoad;
     private boolean passengers;
     private boolean cargo;
@@ -35,6 +36,18 @@ public class Train {
                     throw new InvalidRouteException("Invalid Route!");
                 }
                 this.speed = 2;
+                this.originalSpeed = 2;
+                this.passengers = true;
+                this.cargo = false;
+                this.maxLoad = 3500;
+                this.circularRoute = false;
+                break;
+            case "RepairTrain":
+                if (isRouteValid(tracks, st1, st2)) {
+                    throw new InvalidRouteException("Invalid Route!");
+                }
+                this.speed = 2;
+                this.originalSpeed = 2;
                 this.passengers = true;
                 this.cargo = false;
                 this.maxLoad = 3500;
@@ -45,6 +58,7 @@ public class Train {
                     throw new InvalidRouteException("Invalid Route!");
                 }
                 this.speed = 3;
+                this.originalSpeed = 3;
                 this.passengers = false;
                 this.cargo = true;
                 this.maxLoad = 5000;
@@ -52,6 +66,7 @@ public class Train {
                 break;
             case "BulletTrain":
                 this.speed = 5;
+                this.originalSpeed = 5;
                 this.passengers = true;
                 this.cargo = true;
                 this.maxLoad = 5000;
@@ -105,9 +120,17 @@ public class Train {
     public List<String> getRoute() {
         return this.route;
     }
+    
+    public void decreaseTrainSpeed() {
+        this.speed *= (1 - ((this.getCargoWeightOfTrain()) * 0.01) / 100);
+    }
 
     public double getSpeed() {
         return this.speed;
+    }
+
+    public void resetSpeed() {
+        this.speed = this.originalSpeed;
     }
 
     public boolean isCircular() {
@@ -139,6 +162,12 @@ public class Train {
         return loads;
     }
 
+    public int getMechanicsOnTrain() {
+        int s = 0;
+        for (Load ld : loads) if (ld.isMechanic()) s += 1;
+        return s;
+    }
+
     public boolean canPassengersBeOnThisTrain() {
         return this.passengers;
     }
@@ -159,10 +188,6 @@ public class Train {
             if (load.getLoadType().equals("Cargo") || load.getLoadType().equals("PerishableCargo")) s += load.getLoadWeight();
         }
         return s;
-    }
-
-    public void decreaseTrainSpeed() {
-        this.speed *= (1 - ((this.getCargoWeightOfTrain()) * 0.01) / 100);
     }
 
     public List<LoadInfoResponse> getLoadInfoResponsesOfTrain() {

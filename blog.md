@@ -41,3 +41,6 @@ Task C looks pretty easy. It's just a lot of things all together but it shouldn'
 Day 2 - 29-09-2025
 The first thing i am gonna do today is add a method for setting the type of a track. Now I am working on trackSimulator in Helper.java.
 I found a bug in my code. In simulate function I am using the wrong logic for embarking the passengers. In my code if a train has left a station and then I create a passenger at the station which the train left, in the next tick my train is picking up that passenger as well which should not be the case. I am getting ConcurrentModificationExceptions again and again, so I'm gonna use the iterator method to delete the items from now on. Changing all the deletion function to iterator based deletion. I have now fixed the Concurrent error and now i am checking if breakable track functionality is fine or not. The code is working fine. I found one more bug that the speed should be reset to the original speed.
+
+Day 3 - 30-09-2025
+The first thing which I'll do today is to make a method to reset speed of a train after it reaches a station. I need to change the method for train moving. My logic is flawed. But for now I will be starting with task cii. I have made controller in TrainsController.java. Add weight condition in embarking. Task cii works perfectly fine i think.

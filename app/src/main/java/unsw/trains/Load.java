@@ -13,16 +13,17 @@ public class Load {
     private String trainAssigned = null;
     private boolean hasReachedDestination; // void - should be removed in the end.
     private int minsTillPerish;
-
+    private boolean isMechanic;
     // add the functionality for setting load position while simulate.
 
-    public Load(String startStationId, String destStationId, String loadId, String loadType, int weight, List<Station> stations) {
+    public Load(String startStationId, String destStationId, String loadId, String loadType, int weight, boolean isMechanic, List<Station> stations) {
         this.destStationId = destStationId;
         this.loadId = loadId;
         this.loadType = loadType;
         this.currPosition = Helper.findStation(stations, startStationId).getStationCoordinates();
         this.weight = weight;
         this.hasReachedDestination = false;
+        this.isMechanic = isMechanic;
     }
 
     public Load(String startStationId, String destStationId, String loadId, String loadType, int weight, int minsTillPerish, List<Station> stations) {
@@ -87,5 +88,9 @@ public class Load {
 
     public void decMinsTillPerished() {
         this.minsTillPerish--;
+    }
+
+    public boolean isMechanic() {
+        return this.isMechanic;
     }
 }

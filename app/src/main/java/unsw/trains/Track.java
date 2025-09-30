@@ -49,7 +49,7 @@ public class Track {
     }
 
     public void incDurabilityOfTrack(int inc) {
-        this.durability += inc;
+        this.durability = Math.min(10, this.durability + inc);
     }
 
     public boolean isTrackBreakable() {

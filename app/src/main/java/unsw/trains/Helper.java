@@ -54,7 +54,6 @@ public class Helper {
                     t.addLoadToTrain(load);
                     st.delLoadFromStation(load);
                     load.setLoadTrain(t.getTrainId());
-                    break;
                 }
             }
         }
@@ -77,9 +76,15 @@ public class Helper {
         return res;
     }
 
+    public static void fixDurabilityOfTrack(Train t, Track track) {
+        int mech = t.getMechanicsOnTrain();
+        System.out.println(mech);
+        track.incDurabilityOfTrack(1 + mech*2);
+        if (track.getDurability() == 10) track.setTrackType(TrackType.UNBROKEN);
+    }
+
     public static void trackSimulator(Train t, Track track) {
-        if (track.getDurability() == 0 && track.getTrackType() == TrackType.BROKEN) {
-            // do repair stuff in task cii
+        if (track.getTrackType() == TrackType.BROKEN || t.getType().equals("RepairTrain")) {
             return;
         };
         int dec = (int) (1 + Math.ceil((double) t.getTotalLoadWeightOfTrain() / 1000));

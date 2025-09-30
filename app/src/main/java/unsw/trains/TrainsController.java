@@ -105,16 +105,14 @@ public class TrainsController {
 
             if (stationFinal.checkIfStationIsFull()) continue;
             Track track = Helper.isThereATrack(tracks, stationIdCur, stationIdFinal);
-            if (track != null && track.getTrackType() == TrackType.BROKEN) {
-                // do stuff in cii.
-                continue;
-            };
-
+            if (track != null && track.getTrackType() == TrackType.BROKEN && t.getType() != "RepairTrain") continue;
+            
             Position destination = stationFinal.getStationCoordinates();
             Position currentTrainPosition = t.getTrainPosition();
             stationCur.decrementCurrTrains(); // i think this is void
             Helper.simulateLoadEmbark(stationCur, t);
             t.decreaseTrainSpeed();
+            if (track != null && track.getTrackType() == TrackType.BROKEN && t.getType() == "RepairTrain") Helper.fixDurabilityOfTrack(t, track);
             
             if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
                 t.setTrainPosition(destination);
@@ -122,6 +120,7 @@ public class TrainsController {
                 stationFinal.incrementCurrTrains(); // i think this is void
                 Helper.trackSimulator(t, track);
                 Helper.simulateLoadDisembark(stationFinal, t);
+                t.resetSpeed();
                 continue;
             }
             t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));
@@ -140,30 +139,32 @@ public class TrainsController {
     }
 
     public void createPassenger(String startStationId, String destStationId, String passengerId) {
-        Load ld = new Load(startStationId, destStationId, passengerId, "Passenger", 70, stations);
+        Load ld = new Load(startStationId, destStationId, passengerId, "Passenger", 70, false, stations);
         Station st = Helper.findStation(stations, startStationId);
         st.addLoadToStation(ld);
     }
-
+    
     public void createCargo(String startStationId, String destStationId, String cargoId, int weight) {
-        Load ld = new Load(startStationId, destStationId, cargoId, "Cargo", weight, stations);
+        Load ld = new Load(startStationId, destStationId, cargoId, "Cargo", weight, false, stations);
         Station st = Helper.findStation(stations, startStationId);
         st.addLoadToStation(ld);
     }
-
+    
     public void createPerishableCargo(String startStationId, String destStationId, String cargoId, int weight,
-            int minsTillPerish) {
+    int minsTillPerish) {
         Load ld = new Load(startStationId, destStationId, cargoId, "PerishableCargo", weight, minsTillPerish, stations);
         Station st = Helper.findStation(stations, startStationId);
         st.addLoadToStation(ld);
     }
-
+    
     public void createTrack(String trackId, String fromStationId, String toStationId, boolean isBreakable) {
         Track t = new Track(trackId, fromStationId, toStationId, isBreakable);
         tracks.add(t);
     }
-
+    
     public void createPassenger(String startStationId, String destStationId, String passengerId, boolean isMechanic) {
-        // Todo: Task cii
+        Load ld = new Load(startStationId, destStationId, passengerId, "Passenger", 70, isMechanic, stations);
+        Station st = Helper.findStation(stations, startStationId);
+        st.addLoadToStation(ld);
     }
 }
