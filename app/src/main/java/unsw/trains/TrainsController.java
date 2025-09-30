@@ -109,8 +109,10 @@ public class TrainsController {
             
             Position destination = stationFinal.getStationCoordinates();
             Position currentTrainPosition = t.getTrainPosition();
-            stationCur.decrementCurrTrains(); // i think this is void
-            Helper.simulateLoadEmbark(stationCur, t);
+            if (t.getAtStation()) {
+                Helper.simulateLoadEmbark(stationCur, t);
+                t.setAtStation();
+            }
             t.decreaseTrainSpeed();
             if (track != null && track.getTrackType() == TrackType.BROKEN && t.getType() == "RepairTrain") Helper.fixDurabilityOfTrack(t, track);
             
@@ -121,6 +123,7 @@ public class TrainsController {
                 Helper.trackSimulator(t, track);
                 Helper.simulateLoadDisembark(stationFinal, t);
                 t.resetSpeed();
+                t.setAtStation();
                 continue;
             }
             t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));

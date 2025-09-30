@@ -23,6 +23,7 @@ public class Train {
     private String location;
     private List<Load> loads = new ArrayList<>();
     private List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
+    private boolean atStation = true;
 
     public boolean isRouteValid(List<Track> tracks, String st1, String st2) {
         if (tracks.size() < 3) return false;
@@ -213,5 +214,13 @@ public class Train {
                 }
             }
         }
+    }
+
+    public boolean getAtStation() {
+        return this.atStation;
+    }
+
+    public void setAtStation() {
+        this.atStation = !this.atStation;
     }
 }
