@@ -15,7 +15,7 @@ import unsw.utils.TrackType;
  */
 public class TrainsController {
     // Add any fields here if necessary
-    List<Station> stations = new ArrayList<>();
+    List<Station> stations = new ArrayList<>(); // todo: hashmap
     List<Track> tracks = new ArrayList<>();
     List<Train> trains = new ArrayList<>();
     // boolean firstSim = false;
@@ -63,6 +63,7 @@ public class TrainsController {
     public TrainInfoResponse getTrainInfo(String trainId) {
         for (Train t : trains) {
             if (t.getTrainId().equals(trainId)) {
+                // make in train
                 return new TrainInfoResponse(trainId, t.getLocation(), t.getType(), t.getTrainPosition(),
                 t.getLoadInfoResponsesOfTrain());
             }

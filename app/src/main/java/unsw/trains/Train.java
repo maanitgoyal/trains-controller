@@ -122,6 +122,7 @@ public class Train {
         return this.route;
     }
     
+    
     public void decreaseTrainSpeed() {
         this.speed *= (1 - ((this.getCargoWeightOfTrain()) * 0.01) / 100);
     }
