@@ -3,9 +3,11 @@ package unsw.trains;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import unsw.exceptions.InvalidRouteException;
 import unsw.response.models.LoadInfoResponse;
+import unsw.response.models.TrainInfoResponse;
 import unsw.utils.Position;
 
 public class Train {
@@ -22,7 +24,6 @@ public class Train {
     private Position position;
     private String location;
     private List<Load> loads = new ArrayList<>();
-    private List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
     private boolean atStation = true;
 
     public Train(String trainId, String type, String stationId, List<String> route,
@@ -74,7 +75,6 @@ public class Train {
         return this.route;
     }
     
-    
     public void decreaseTrainSpeed() {
         this.speed *= (1 - ((this.getCargoWeightOfTrain()) * 0.01) / 100);
     }
@@ -118,12 +118,20 @@ public class Train {
 
     public int getMechanicsOnTrain() {
         int s = 0;
-        for (Load ld : loads) if (ld.isMechanic()) s += 1;
+        for (Load ld : loads) if (Objects.equals(this.getType(), "RepairTrain") && ld.isMechanic()) s += 1;
         return s;
     }
 
     public boolean canPassengersBeOnThisTrain() {
         return this.passengers;
+    }
+    
+    public boolean getAtStation() {
+        return this.atStation;
+    }
+
+    public void setAtStation() {
+        this.atStation = !this.atStation;
     }
 
     public boolean canCargoBeOnThisTrain() {
@@ -139,18 +147,21 @@ public class Train {
     public int getCargoWeightOfTrain() {
         int s = 0;
         for (Load load : loads) {
-            if (load.getLoadType().equals("Cargo") || load.getLoadType().equals("PerishableCargo")) s += load.getLoadWeight();
+            if (load.getLoadType().equals("Cargo") ||
+            load.getLoadType().equals("PerishableCargo")) s += load.getLoadWeight();
         }
         return s;
     }
 
+    public TrainInfoResponse getTrainInfoResponseOfTrain() {
+        return new TrainInfoResponse(this.trainId, this.location, this.type, this.position, this.getLoadInfoResponsesOfTrain());
+    }
+
     public List<LoadInfoResponse> getLoadInfoResponsesOfTrain() {
         this.loads.sort((l1, l2) -> l1.getLoadId().compareTo(l2.getLoadId()));
-        this.loadInfoResponses.clear();
-        for (Load ld : this.loads) {
-            this.loadInfoResponses.add(new LoadInfoResponse(ld.getLoadId(), ld.getLoadType()));
-        }
-        return this.loadInfoResponses;
+        List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
+        for (Load ld : this.loads) loadInfoResponses.add(ld.getLoadInfoResponseOfLoad());
+        return loadInfoResponses;
     }
 
     public void removeExpiredCargo() {
@@ -167,13 +178,5 @@ public class Train {
                 }
             }
         }
-    }
-
-    public boolean getAtStation() {
-        return this.atStation;
-    }
-
-    public void setAtStation() {
-        this.atStation = !this.atStation;
     }
 }

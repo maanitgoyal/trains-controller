@@ -1,5 +1,6 @@
 package unsw.trains;
 
+import unsw.response.models.TrackInfoResponse;
 import unsw.utils.TrackType;
 
 public class Track {
@@ -54,5 +55,9 @@ public class Track {
 
     public boolean isTrackBreakable() {
         return this.isBreakable;
+    }
+
+    public TrackInfoResponse getTrackInfoResponseOfTrack() {
+        return new TrackInfoResponse(trackId, fromStationId, toStationId, trackType, durability);
     }
 }

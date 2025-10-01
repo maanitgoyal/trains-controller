@@ -1,7 +1,8 @@
 package unsw.trains;
 
-import java.util.List;
+import java.util.HashMap;
 
+import unsw.response.models.LoadInfoResponse;
 import unsw.utils.Position;
 
 public class Load {
@@ -14,23 +15,22 @@ public class Load {
     private boolean hasReachedDestination; // void - should be removed in the end.
     private int minsTillPerish;
     private boolean isMechanic;
-    // add the functionality for setting load position while simulate.
 
-    public Load(String startStationId, String destStationId, String loadId, String loadType, int weight, boolean isMechanic, List<Station> stations) {
+    public Load(String startStationId, String destStationId, String loadId, String loadType, int weight, boolean isMechanic, HashMap<String, Station> stations) {
         this.destStationId = destStationId;
         this.loadId = loadId;
         this.loadType = loadType;
-        this.currPosition = Helper.findStation(stations, startStationId).getStationCoordinates();
+        this.currPosition = stations.get(startStationId).getStationCoordinates();
         this.weight = weight;
         this.hasReachedDestination = false;
         this.isMechanic = isMechanic;
     }
 
-    public Load(String startStationId, String destStationId, String loadId, String loadType, int weight, int minsTillPerish, List<Station> stations) {
+    public Load(String startStationId, String destStationId, String loadId, String loadType, int weight, int minsTillPerish, HashMap<String, Station> stations) {
         this.destStationId = destStationId;
         this.loadId = loadId;
         this.loadType = loadType;
-        this.currPosition = Helper.findStation(stations, startStationId).getStationCoordinates();
+        this.currPosition = stations.get(startStationId).getStationCoordinates();
         this.weight = weight;
         this.hasReachedDestination = false;
         this.minsTillPerish = minsTillPerish;
@@ -92,5 +92,9 @@ public class Load {
 
     public boolean isMechanic() {
         return this.isMechanic;
+    }
+
+    public LoadInfoResponse getLoadInfoResponseOfLoad() {
+        return new LoadInfoResponse(this.loadId, this.loadType);
     }
 }

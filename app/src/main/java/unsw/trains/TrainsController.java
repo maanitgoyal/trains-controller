@@ -45,46 +45,26 @@ public class TrainsController {
     }
 
     public List<String> listTrainIds() {
-        List<String> l = new ArrayList<>();
-        for (Train t : trains) {
-            l.add(t.getTrainId());
-        }
-        return l;
+        return new ArrayList<>(trains.keySet());
     }
 
     public TrainInfoResponse getTrainInfo(String trainId) {
-        for (Train t : trains) {
-            if (t.getTrainId().equals(trainId)) {
-                // make in train
-                return new TrainInfoResponse(trainId, t.getLocation(), t.getType(), t.getTrainPosition(),
-                t.getLoadInfoResponsesOfTrain());
-            }
-        }
-        return null;
+        return this.trains.get(trainId).getTrainInfoResponseOfTrain();
     }
 
     public StationInfoResponse getStationInfo(String stationId) {
-        for (Station station : stations) {
-            if (station.getStationId().equals(stationId)) {
-                return new StationInfoResponse(stationId, station.getStationType(), station.getStationCoordinates(), station.getLoadInfoResponsesofStation(), station.getTrainInfoResponsesOnStation(trains));
-            }
-        }
-        return null;
+        return this.stations.get(stationId).getStationInfoResponseOfStation(new ArrayList<>(this.trains.values()));
     }
 
     public TrackInfoResponse getTrackInfo(String trackId) {
-        for (Track tr : tracks) {
-            if (tr.getTrackId().equals(trackId)) {
-                return new TrackInfoResponse(trackId, tr.getFromStationId(),
-                tr.getToStationId(), tr.getTrackType(), tr.getDurability());
-            }
-        }
-        return null;
+        return this.tracks.get(trackId).getTrackInfoResponseOfTrack();
     }
 
     public void simulate() {
-        this.trains.sort((t1, t2) -> t1.getTrainId().compareTo(t2.getTrainId()));
-        for (Train t : trains) {
+        List<String> tr = new ArrayList<>(this.trains.keySet());
+        tr.sort((t1, t2) -> t1.compareTo(t2));
+        for (String id : tr) {
+            Train t = this.trains.get(id);
             int last = t.getLastIndex();
             int routeSize = t.getRoute().size();
 
@@ -96,7 +76,7 @@ public class TrainsController {
             String stationIdFinal = t.getRoute().get(cur);
             Station stationFinal = Helper.findStation(this.stations, stationIdFinal);
 
-            if (stationFinal.checkIfStationIsFull()) continue;
+            if (stationFinal.checkIfStationIsFull(new ArrayList<>(this.trains.values()))) continue;
             Track track = Helper.isThereATrack(tracks, stationIdCur, stationIdFinal);
             if (track != null && track.getTrackType() == TrackType.BROKEN && t.getType() != "RepairTrain") continue;
             

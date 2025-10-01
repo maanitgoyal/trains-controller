@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import unsw.response.models.LoadInfoResponse;
+import unsw.response.models.StationInfoResponse;
 import unsw.response.models.TrainInfoResponse;
 import unsw.utils.Position;
 
@@ -78,19 +79,19 @@ public class Station {
     public List<LoadInfoResponse> getLoadInfoResponsesofStation() {
         this.loads.sort((l1, l2) -> l1.getLoadId().compareTo(l2.getLoadId()));
         List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
-        for (Load ld : this.loads) {
-            loadInfoResponses.add(new LoadInfoResponse(ld.getLoadId(), ld.getLoadType()));
-        }
+        for (Load ld : this.loads) loadInfoResponses.add(ld.getLoadInfoResponseOfLoad());
         return loadInfoResponses;
     }
 
     public List<TrainInfoResponse> getTrainInfoResponsesOnStation(List<Train> trains) {
         List<Train> tr = Helper.trainsOnStation(trains, this);
         List<TrainInfoResponse> trainInfoResponses = new ArrayList<>();
-        for (Train train : tr) {
-            trainInfoResponses.add(new TrainInfoResponse(train.getTrainId(),
-            this.getStationId(), train.getType(), train.getTrainPosition(), train.getLoadInfoResponsesOfTrain()));
-        }
+        for (Train train : tr) trainInfoResponses.add(train.getTrainInfoResponseOfTrain());
         return trainInfoResponses;
+    }
+
+    public StationInfoResponse getStationInfoResponseOfStation(List<Train> trains) {
+        return new StationInfoResponse(stationId, type, stationCoordinates,
+        getLoadInfoResponsesofStation(), getTrainInfoResponsesOnStation(trains));
     }
 }
