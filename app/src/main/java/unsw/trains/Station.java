@@ -8,52 +8,23 @@ import unsw.response.models.LoadInfoResponse;
 import unsw.response.models.TrainInfoResponse;
 import unsw.utils.Position;
 
-public class Station extends Position {
+public class Station {
     private String stationId;
     private String type;
     private int maxTrains;
     private double passengers;
     private double cargo;
-    private int curTrains;
+    private Position stationCoordinates;
     private List<Load> loads = new ArrayList<>();
-    private List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
-    private List<TrainInfoResponse> trainInfoResponses = new ArrayList<>();
 
-    public void setType(String t) {
-        switch (t) {
-            case "PassengerStation":
-                this.maxTrains = 2;
-                this.passengers = Double.POSITIVE_INFINITY;
-                this.cargo = 0;
-                break;
-            case "CargoStation":
-                this.maxTrains = 4;
-                this.passengers = 0;
-                this.cargo = Double.POSITIVE_INFINITY;
-                break;
-            case "CentralStation":
-                this.maxTrains = 8;
-                this.passengers = Double.POSITIVE_INFINITY;
-                this.cargo = Double.POSITIVE_INFINITY;
-                break;
-            case "DepotStation":
-                this.maxTrains = 8;
-                this.passengers = 0;
-                this.cargo = 0;
-                break;
-            default:
-                break;
-        }
-    }
-
-    public Station(String stationId, String type, double x, double y) {
-        super(x, y);
+    public Station(String stationId, String type, Position pos, int maxTrains, double passengers, double cargo) {
         this.stationId = stationId;
         this.type = type;
-        this.curTrains = 0;
-        setType(type);
+        this.stationCoordinates = pos;
+        this.maxTrains = maxTrains;
+        this.passengers = passengers;
+        this.cargo = cargo;
     }
-
 
     public String getStationId() {
         return this.stationId;
@@ -64,23 +35,15 @@ public class Station extends Position {
     }
 
     public Position getStationCoordinates() {
-        return new Position(this.getX(), this.getY());
+        return this.stationCoordinates;
     }
 
     public int getMaxTrains() {
         return maxTrains;
     }
 
-    public boolean checkIfStationIsFull() {
-        return this.curTrains == this.maxTrains;
-    }
-
-    public void incrementCurrTrains() {
-        this.curTrains++;
-    }
-
-    public void decrementCurrTrains() {
-        this.curTrains--;
+    public boolean checkIfStationIsFull(List<Train> trains) {
+        return Helper.trainsOnStation(trains, this).size() == this.maxTrains;
     }
 
     public boolean canPassengersBeOnThisStation() {
@@ -97,7 +60,6 @@ public class Station extends Position {
 
     public void delLoadFromStation(Load ld) {
         if (loads.isEmpty()) return;
-
         Iterator<Load> it = loads.iterator();
         while (it.hasNext()) {
             Load load = it.next();
@@ -115,20 +77,20 @@ public class Station extends Position {
 
     public List<LoadInfoResponse> getLoadInfoResponsesofStation() {
         this.loads.sort((l1, l2) -> l1.getLoadId().compareTo(l2.getLoadId()));
-        this.loadInfoResponses.clear();
+        List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
         for (Load ld : this.loads) {
-            this.loadInfoResponses.add(new LoadInfoResponse(ld.getLoadId(), ld.getLoadType()));
+            loadInfoResponses.add(new LoadInfoResponse(ld.getLoadId(), ld.getLoadType()));
         }
-        return this.loadInfoResponses;
+        return loadInfoResponses;
     }
 
     public List<TrainInfoResponse> getTrainInfoResponsesOnStation(List<Train> trains) {
         List<Train> tr = Helper.trainsOnStation(trains, this);
-        this.trainInfoResponses.clear();
+        List<TrainInfoResponse> trainInfoResponses = new ArrayList<>();
         for (Train train : tr) {
-            this.trainInfoResponses.add(new TrainInfoResponse(train.getTrainId(),
+            trainInfoResponses.add(new TrainInfoResponse(train.getTrainId(),
             this.getStationId(), train.getType(), train.getTrainPosition(), train.getLoadInfoResponsesOfTrain()));
         }
-        return this.trainInfoResponses;
+        return trainInfoResponses;
     }
 }

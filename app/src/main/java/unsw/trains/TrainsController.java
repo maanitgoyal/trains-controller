@@ -1,6 +1,7 @@
 package unsw.trains;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import unsw.exceptions.InvalidRouteException;
@@ -15,14 +16,15 @@ import unsw.utils.TrackType;
  */
 public class TrainsController {
     // Add any fields here if necessary
-    List<Station> stations = new ArrayList<>(); // todo: hashmap
+    // List<Station> stations = new ArrayList<>(); // todo: hashmap
+    HashMap<String, Station> stations = new HashMap<>();
     List<Track> tracks = new ArrayList<>();
     List<Train> trains = new ArrayList<>();
     // boolean firstSim = false;
 
     public void createStation(String stationId, String type, double x, double y) {
-        Station st = new Station(stationId, type, x, y);
-        stations.add(st);
+        Station st = Helper.createStationHelper(stationId, type, x, y);
+        stations.put(stationId, st);
     }
 
     public void createTrack(String trackId, String fromStationId, String toStationId) {
@@ -120,7 +122,7 @@ public class TrainsController {
             if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
                 t.setTrainPosition(destination);
                 t.setLastIndex(cur);
-                stationFinal.incrementCurrTrains(); // i think this is void
+                // stationFinal.incrementCurrTrains(); // i think this is void
                 Helper.trackSimulator(t, track);
                 Helper.simulateLoadDisembark(stationFinal, t);
                 t.resetSpeed();

@@ -44,3 +44,6 @@ I found a bug in my code. In simulate function I am using the wrong logic for em
 
 Day 3 - 30-09-2025
 The first thing which I'll do today is to make a method to reset speed of a train after it reaches a station. I need to change the method for train moving. My logic is flawed. But for now I will be starting with task cii. I have made controller in TrainsController.java. Add weight condition in embarking. Task cii works perfectly fine i think. I need to check for reverse route when the route line finishes.
+
+Day 4 - 01-10-2025
+There was a lot of feedback from my tutor. I need to refactor my entire code. I have to make parent class and sub classes which inherit from them. I am gonna start working on Station.java first. I have created 4 subclasses of Station representing every station. I have created a helper method in Helper.java which returns a Station object based on the type. In that function, I have used "POLYMORPHISM" concept of OOPS design, where I declare a variable of parent type (Station) and assign it to object of subclass. I have also changed the data structure for storing stations to hashmap. I have also deleted the InfoResponses variables in Station.java.

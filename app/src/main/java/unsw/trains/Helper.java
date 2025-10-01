@@ -2,6 +2,7 @@ package unsw.trains;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import unsw.utils.TrackType;
 
@@ -75,7 +76,7 @@ public class Helper {
         res.sort((t1, t2) -> t1.getTrainId().compareTo(t2.getTrainId()));
         return res;
     }
-
+ 
     public static void fixDurabilityOfTrack(Train t, Track track) {
         int mech = t.getMechanicsOnTrain();
         System.out.println(mech);
@@ -92,5 +93,15 @@ public class Helper {
         if (track.getDurability() == 0) {
             track.setTrackType(TrackType.BROKEN);
         }
+    }
+
+    public static Station createStationHelper(String stationId, String type, double x, double y) {
+        Station st;
+        if (Objects.equals("PassengerStation", type)) st = new PassengerStation(stationId, type, x, y);
+        else if (Objects.equals("CargoStation", type)) st = new CargoStation(stationId, type, x, y);
+        else if (Objects.equals("DepotStation", type)) st = new DepotStation(stationId, type, x, y);
+        else if (Objects.equals("CentralStation", type)) st = new DepotStation(stationId, type, x, y);
+        else st = null;
+        return st;
     }
 }
