@@ -25,69 +25,21 @@ public class Train {
     private List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
     private boolean atStation = true;
 
-    public boolean isRouteValid(List<Track> tracks, String st1, String st2) {
-        if (tracks.size() < 3) return false;
-        return Helper.isThereATrack(tracks, st1, st2) != null;
-    }
-
-    public void setType(String type, List<Track> tracks, String st1, String st2) throws InvalidRouteException {
-        switch (type) {
-            case "PassengerTrain":
-                if (isRouteValid(tracks, st1, st2)) {
-                    throw new InvalidRouteException("Invalid Route!");
-                }
-                this.speed = 2;
-                this.originalSpeed = 2;
-                this.passengers = true;
-                this.cargo = false;
-                this.maxLoad = 3500;
-                this.circularRoute = false;
-                break;
-            case "RepairTrain":
-                if (isRouteValid(tracks, st1, st2)) {
-                    throw new InvalidRouteException("Invalid Route!");
-                }
-                this.speed = 2;
-                this.originalSpeed = 2;
-                this.passengers = true;
-                this.cargo = false;
-                this.maxLoad = 3500;
-                this.circularRoute = false;
-                break;
-            case "CargoTrain":
-                if (isRouteValid(tracks, st1, st2)) {
-                    throw new InvalidRouteException("Invalid Route!");
-                }
-                this.speed = 3;
-                this.originalSpeed = 3;
-                this.passengers = false;
-                this.cargo = true;
-                this.maxLoad = 5000;
-                this.circularRoute = false;
-                break;
-            case "BulletTrain":
-                this.speed = 5;
-                this.originalSpeed = 5;
-                this.passengers = true;
-                this.cargo = true;
-                this.maxLoad = 5000;
-                this.circularRoute = true;
-                break;
-            default:
-                break;
-        }
-    }
-
-    public Train(String trainId, String type, String stationId, List<String> route, List<Track> tracks, List<Station> stations) throws InvalidRouteException {
-        String start = route.get(0);
-        String end = route.get(route.size() - 1);
-        setType(type, tracks, start, end);
+    public Train(String trainId, String type, String stationId, List<String> route,
+    Position pos, double speed, double originalSpeed, boolean passengers,
+    boolean cargo, int maxLoad, boolean circularRoute) throws InvalidRouteException {
         this.trainId = trainId;
         this.lastIndex = 0;
         this.route = route;
         this.location = stationId;
         this.type = type;
-        this.position = Helper.findStation(stations, stationId).getStationCoordinates();
+        this.position = pos;
+        this.speed = speed;
+        this.originalSpeed = originalSpeed;
+        this.passengers = passengers;
+        this.cargo = cargo;
+        this.maxLoad = maxLoad;
+        this.circularRoute = circularRoute;
     }
 
     public String getTrainId() {

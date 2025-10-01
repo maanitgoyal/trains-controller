@@ -1,17 +1,19 @@
 package unsw.trains;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import unsw.exceptions.InvalidRouteException;
 import unsw.utils.TrackType;
 
 import java.lang.Math;
 
 public class Helper {
-    public static Station findStation(List<Station> stations, String stationId) {
-        for (Station station : stations) {
-            if (station.getStationId().equals(stationId)) return station;
+    public static Station findStation(HashMap<String, Station> stations, String stationId) {
+        for (String station : stations.keySet()) {
+            if (Objects.equals(station, stationId)) return stations.get(stationId);
         }
         return null;
     }
@@ -60,8 +62,8 @@ public class Helper {
         }
     }
 
-    public static Track isThereATrack(List<Track> tracks, String st1, String st2) {
-        for (Track track : tracks) {
+    public static Track isThereATrack(HashMap<String, Track> tracks, String st1, String st2) {
+        for (Track track : tracks.values()) {
             if ((track.getFromStationId().equals(st1) && track.getToStationId().equals(st2))
             || (track.getFromStationId().equals(st2) && track.getToStationId().equals(st1))) return track;
         }
@@ -95,6 +97,15 @@ public class Helper {
         }
     }
 
+    public static List<String> isRouteValid(HashMap<String, Track> tracks, List<String> route) throws InvalidRouteException {
+        if (tracks.size() < 3) return route;
+        String st1 = route.get(0);
+        String st2 = route.get(route.size() - 1);
+        Track t = isThereATrack(tracks, st1, st2);
+        if (t == null) return route;
+        else throw new InvalidRouteException("Route cannot be circular!!");
+    }
+
     public static Station createStationHelper(String stationId, String type, double x, double y) {
         Station st;
         if (Objects.equals("PassengerStation", type)) st = new PassengerStation(stationId, type, x, y);
@@ -103,5 +114,16 @@ public class Helper {
         else if (Objects.equals("CentralStation", type)) st = new DepotStation(stationId, type, x, y);
         else st = null;
         return st;
+    }
+
+    public static Train createTrainHelper(String trainId, String type, String stationId, List<String> route,
+    HashMap<String, Track> tracks, HashMap<String, Station> stations) throws InvalidRouteException{
+        Train t;
+        if (Objects.equals("PassengerTrain", type)) t = new PassengerTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
+        else if (Objects.equals("BulletTrain", type)) t = new BulletTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
+        else if (Objects.equals("CargoTrain", type)) t = new CargoTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
+        else if (Objects.equals("RepairTrain", type)) t = new RepairTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
+        else t = null;
+        return t;
     }
 }

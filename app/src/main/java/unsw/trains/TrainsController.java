@@ -16,11 +16,9 @@ import unsw.utils.TrackType;
  */
 public class TrainsController {
     // Add any fields here if necessary
-    // List<Station> stations = new ArrayList<>(); // todo: hashmap
     HashMap<String, Station> stations = new HashMap<>();
-    List<Track> tracks = new ArrayList<>();
-    List<Train> trains = new ArrayList<>();
-    // boolean firstSim = false;
+    HashMap<String, Track> tracks = new HashMap<>();
+    HashMap<String, Train> trains = new HashMap<>();
 
     public void createStation(String stationId, String type, double x, double y) {
         Station st = Helper.createStationHelper(stationId, type, x, y);
@@ -29,29 +27,21 @@ public class TrainsController {
 
     public void createTrack(String trackId, String fromStationId, String toStationId) {
         Track tr = new Track(trackId, fromStationId, toStationId, false);
-        tracks.add(tr);
+        tracks.put(trackId, tr);
     }
 
     public void createTrain(String trainId, String type, String stationId, List<String> route)
             throws InvalidRouteException {
-        Train t = new Train(trainId, type, stationId, route, this.tracks, this.stations);
-        trains.add(t);
+        Train t = Helper.createTrainHelper(trainId, type, stationId, route, tracks, stations);
+        trains.put(trainId, t);
     }
 
     public List<String> listStationIds() {
-        List<String> l = new ArrayList<>();
-        for (Station st : stations) {
-            l.add(st.getStationId());
-        }
-        return l;
+        return new ArrayList<>(stations.keySet());
     }
 
     public List<String> listTrackIds() {
-        List<String> l = new ArrayList<>();
-        for (Track tr : tracks) {
-            l.add(tr.getTrackId());
-        }
-        return l;
+        return new ArrayList<>(tracks.keySet());
     }
 
     public List<String> listTrainIds() {
@@ -165,7 +155,7 @@ public class TrainsController {
     
     public void createTrack(String trackId, String fromStationId, String toStationId, boolean isBreakable) {
         Track t = new Track(trackId, fromStationId, toStationId, isBreakable);
-        tracks.add(t);
+        tracks.put(trackId, t);
     }
     
     public void createPassenger(String startStationId, String destStationId, String passengerId, boolean isMechanic) {

@@ -16,7 +16,7 @@ public class Track {
         this.toStationId = toStationId;
         this.durability = 10;
         this.isBreakable = isBreakable;
-        this.trackType = (!isBreakable) ? TrackType.NORMAL : TrackType.UNBROKEN;
+        this.trackType = (isBreakable) ? TrackType.UNBROKEN : TrackType.NORMAL;
     }
 
     public String getTrackId() {
