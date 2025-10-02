@@ -11,7 +11,7 @@ import unsw.utils.Position;
 public class Train {
     private String trainId;
     private String type;
-    private int lastIndex;
+    private String lastStationVisited;
     private List<String> route = new ArrayList<>();
     private double speed;
     private double originalSpeed;
@@ -23,12 +23,13 @@ public class Train {
     private String location;
     private List<Load> loads = new ArrayList<>();
     private boolean atStation = true;
+    private boolean reverseRoute = false;
 
     public Train(String trainId, String type, String stationId, List<String> route,
     Position pos, double speed, double originalSpeed, boolean passengers,
     boolean cargo, int maxLoad, boolean circularRoute) throws InvalidRouteException {
         this.trainId = trainId;
-        this.lastIndex = 0;
+        this.lastStationVisited = stationId;
         this.route = route;
         this.location = stationId;
         this.type = type;
@@ -43,6 +44,10 @@ public class Train {
 
     public String getTrainId() {
         return this.trainId;
+    }
+
+    public void setLocation(String loc) {
+        this.location = loc;
     }
 
     public String getLocation() {
@@ -61,12 +66,12 @@ public class Train {
         this.position = newPos;
     }
 
-    public int getLastIndex() {
-        return this.lastIndex;
+    public String getLastStationVisited() {
+        return this.lastStationVisited;
     }
 
-    public void setLastIndex(int index) {
-        this.lastIndex = index;
+    public void setLastStationVisited(String st) {
+        this.lastStationVisited = st;
     }
 
     public List<String> getRoute() {
@@ -80,7 +85,7 @@ public class Train {
     public void setSpeed(double speed) {
         this.speed = speed;
     }
-    
+
     public double getSpeed() {
         return this.speed;
     }
@@ -89,6 +94,14 @@ public class Train {
         return this.circularRoute;
     }
     
+    public boolean getReverseRoute() {
+        return this.reverseRoute;
+    }
+
+    public void setReverseRoute() {
+        this.reverseRoute = !this.reverseRoute;
+    }
+
     public void addLoadToTrain(Load ld) {
         this.loads.add(ld);
     }

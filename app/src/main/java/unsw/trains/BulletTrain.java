@@ -6,7 +6,7 @@ import java.util.List;
 import unsw.exceptions.InvalidRouteException;
 import unsw.utils.Position;
 
-public class BulletTrain extends Train {
+public class BulletTrain extends Train implements InterfaceTrainAndCargo {
     public BulletTrain(String trainId, String type, String stationId, List<String> route, Position pos, HashMap<String, Track> tracks) throws InvalidRouteException {
         super(
             trainId,

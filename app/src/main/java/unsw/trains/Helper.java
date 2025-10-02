@@ -6,18 +6,12 @@ import java.util.List;
 import java.util.Objects;
 
 import unsw.exceptions.InvalidRouteException;
+import unsw.utils.Position;
 import unsw.utils.TrackType;
 
 import java.lang.Math;
 
 public class Helper {
-    // public static Station findStation(HashMap<String, Station> stations, String stationId) {
-    //     for (String station : stations.keySet()) {
-    //         if (Objects.equals(station, stationId)) return stations.get(stationId);
-    //     }
-    //     return null;
-    // }
-
     public static boolean doesTrainReachDestination(Train train, Load ld) {
         return train.getRoute().contains(ld.getLoadDestinationStationId());
     }
@@ -118,5 +112,97 @@ public class Helper {
         else if (Objects.equals("RepairTrain", type)) t = new RepairTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
         else t = null;
         return t;
+    }
+
+    public static String findNextStationToVisit(Train t) {
+        String st = t.getLastStationVisited();
+        List<String> route = t.getRoute();
+        int last = route.indexOf(st);
+        int routeSize = route.size();
+        String nextStation;
+        if (last == routeSize - 1) {
+            if (!t.isCircular()) {
+                nextStation = route.get(last - 1);
+                if (t.getAtStation()) t.setReverseRoute();
+            }
+            else nextStation = route.get(0);
+        }
+        else if (last == 0 && t.getReverseRoute()) {
+            nextStation = route.get(1);
+            if (t.getAtStation()) t.setReverseRoute();
+        }
+        else if (!t.getReverseRoute()){
+            nextStation = route.get(last + 1);
+        }
+        else {
+            nextStation = route.get(last - 1);
+        }
+        return nextStation;
+    }
+
+    public static void helperSimulate(HashMap<String, Train> trains, HashMap<String, Station> stations, HashMap<String, Track> tracks) {
+        List<String> tr = new ArrayList<>(trains.keySet());
+        tr.sort((t1, t2) -> t1.compareTo(t2));
+        for (String id : tr) {
+            Train t = trains.get(id);
+            
+            String stationIdCur = t.getLastStationVisited();
+            Station stationCur = stations.get(stationIdCur);
+            String stationIdFinal = findNextStationToVisit(t);
+            Station stationFinal = stations.get(stationIdFinal);
+
+            if (stationFinal.checkIfStationIsFull(new ArrayList<>(trains.values()))) continue;
+            Track track = Helper.isThereATrack(tracks, stationIdCur, stationIdFinal);
+            if (track != null && track.getTrackType() == TrackType.BROKEN && !(t instanceof RepairTrain)) continue;
+            
+            Position destination = stationFinal.getStationCoordinates();
+            Position currentTrainPosition = t.getTrainPosition();
+            if (t.getAtStation()) {
+                Helper.simulateLoadEmbark(stationCur, t);
+                t.setAtStation();
+            }
+            boolean isCargo = false;
+            boolean isBullet = false;
+            if (t instanceof CargoTrain) {
+                CargoTrain oth = (CargoTrain) t;
+                oth.decreaseTrainSpeed();
+                isCargo = true;
+            }
+            else if (t instanceof BulletTrain) {
+                BulletTrain oth = (BulletTrain) t;
+                oth.decreaseTrainSpeed();
+                isBullet = true;
+            }
+
+            if (track != null && track.getTrackType() == TrackType.BROKEN && t instanceof RepairTrain) {
+                Helper.fixDurabilityOfTrack((RepairTrain)t, track);
+            }
+            
+            if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
+                t.setTrainPosition(destination);
+                t.setLastStationVisited(stationIdFinal);;
+                Helper.trackSimulator(t, track);
+                Helper.simulateLoadDisembark(stationFinal, t);
+                if (isCargo) {
+                    CargoTrain oth = (CargoTrain) t;
+                    oth.resetSpeed();
+                }
+                else if (isBullet) {
+                    BulletTrain oth = (BulletTrain) t;
+                    oth.resetSpeed();
+                }
+                t.setAtStation();
+                continue;
+            }
+            t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));
+            if (isCargo) {
+                CargoTrain oth = (CargoTrain) t;
+                oth.removeExpiredCargo();
+            }
+            else if (isBullet) {
+                BulletTrain oth = (BulletTrain) t;
+                oth.removeExpiredCargo();
+            }
+        }
     }
 }

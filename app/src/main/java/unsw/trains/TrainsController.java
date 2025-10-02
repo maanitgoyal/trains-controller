@@ -6,8 +6,6 @@ import java.util.List;
 
 import unsw.exceptions.InvalidRouteException;
 import unsw.response.models.*;
-import unsw.utils.Position;
-import unsw.utils.TrackType;
 
 /**
  * The controller for the Trains system.
@@ -61,49 +59,7 @@ public class TrainsController {
     }
 
     public void simulate() {
-        List<String> tr = new ArrayList<>(this.trains.keySet());
-        tr.sort((t1, t2) -> t1.compareTo(t2));
-        for (String id : tr) {
-            Train t = this.trains.get(id);
-            int last = t.getLastIndex();
-            int routeSize = t.getRoute().size();
-
-            if (last == routeSize - 1 && !t.isCircular()) continue;
-            int cur = (last == routeSize - 1 && t.isCircular()) ? 0 : last + 1;
-
-            String stationIdCur = t.getRoute().get(last);
-            Station stationCur = this.stations.get(stationIdCur);
-            String stationIdFinal = t.getRoute().get(cur);
-            Station stationFinal = this.stations.get(stationIdFinal);
-
-            if (stationFinal.checkIfStationIsFull(new ArrayList<>(this.trains.values()))) continue;
-            Track track = Helper.isThereATrack(tracks, stationIdCur, stationIdFinal);
-            if (track != null && track.getTrackType() == TrackType.BROKEN && t.getType() != "RepairTrain") continue;
-            
-            Position destination = stationFinal.getStationCoordinates();
-            Position currentTrainPosition = t.getTrainPosition();
-            if (t.getAtStation()) {
-                Helper.simulateLoadEmbark(stationCur, t);
-                t.setAtStation();
-            }
-            t.decreaseTrainSpeed();
-            if (track != null && track.getTrackType() == TrackType.BROKEN && t instanceof RepairTrain) {
-                Helper.fixDurabilityOfTrack((RepairTrain)t, track);
-            }
-            
-            if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
-                t.setTrainPosition(destination);
-                t.setLastIndex(cur);
-                // stationFinal.incrementCurrTrains(); // i think this is void
-                Helper.trackSimulator(t, track);
-                Helper.simulateLoadDisembark(stationFinal, t);
-                t.resetSpeed();
-                t.setAtStation();
-                continue;
-            }
-            t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));
-            t.removeExpiredCargo();
-        }
+        Helper.helperSimulate(trains, stations, tracks);
     }
 
     /**
