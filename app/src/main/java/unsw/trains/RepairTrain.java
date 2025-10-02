@@ -22,4 +22,15 @@ public class RepairTrain extends Train {
             false
         );
     }
+
+    public int getMechanicsOnTrain() {
+        int s = 0;
+        for (Load ld : super.getTrainLoads()) {
+            if (ld instanceof PassengerLoad) {
+                PassengerLoad oth = (PassengerLoad) ld;
+                if (oth.isPassengerMechanic()) s += 1;
+            }
+        }
+        return s;
+    }
 }

@@ -3,8 +3,6 @@ package unsw.trains;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-
 import unsw.exceptions.InvalidRouteException;
 import unsw.response.models.LoadInfoResponse;
 import unsw.response.models.TrainInfoResponse;
@@ -75,16 +73,16 @@ public class Train {
         return this.route;
     }
     
-    public void decreaseTrainSpeed() {
-        this.speed *= (1 - ((this.getCargoWeightOfTrain()) * 0.01) / 100);
+    public double getOriginalSpeed() {
+        return this.originalSpeed;
     }
 
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+    
     public double getSpeed() {
         return this.speed;
-    }
-
-    public void resetSpeed() {
-        this.speed = this.originalSpeed;
     }
 
     public boolean isCircular() {
@@ -114,12 +112,6 @@ public class Train {
 
     public List<Load> getTrainLoads() {
         return loads;
-    }
-
-    public int getMechanicsOnTrain() {
-        int s = 0;
-        for (Load ld : loads) if (Objects.equals(this.getType(), "RepairTrain") && ld.isMechanic()) s += 1;
-        return s;
     }
 
     public boolean canPassengersBeOnThisTrain() {
@@ -162,21 +154,5 @@ public class Train {
         List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
         for (Load ld : this.loads) loadInfoResponses.add(ld.getLoadInfoResponseOfLoad());
         return loadInfoResponses;
-    }
-
-    public void removeExpiredCargo() {
-        Iterator<Load> it = loads.iterator();
-        while (it.hasNext()) {
-            Load load = it.next();
-            if (load.getLoadType().equals("PerishableCargo")) {
-                if (load.getMinsTillPerished() == 0) {
-                    it.remove();
-                } else {
-                    Position cor = this.getTrainPosition();
-                    load.setLoadCurrPosition(cor);
-                    load.decMinsTillPerished();
-                }
-            }
-        }
     }
 }

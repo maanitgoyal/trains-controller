@@ -11,23 +11,15 @@ import unsw.utils.TrackType;
 import java.lang.Math;
 
 public class Helper {
-    public static Station findStation(HashMap<String, Station> stations, String stationId) {
-        for (String station : stations.keySet()) {
-            if (Objects.equals(station, stationId)) return stations.get(stationId);
-        }
-        return null;
-    }
+    // public static Station findStation(HashMap<String, Station> stations, String stationId) {
+    //     for (String station : stations.keySet()) {
+    //         if (Objects.equals(station, stationId)) return stations.get(stationId);
+    //     }
+    //     return null;
+    // }
 
     public static boolean doesTrainReachDestination(Train train, Load ld) {
-        List<String> route = train.getRoute();
-        if (train.isCircular() && route.contains(ld.getLoadDestinationStationId())) return true;
-        else {
-            int id = train.getLastIndex();
-            for (int i = id; i < route.size(); i++) {
-                if (route.get(i).equals(ld.getLoadDestinationStationId())) return true;
-            }
-        }
-        return false;
+        return train.getRoute().contains(ld.getLoadDestinationStationId());
     }
 
     public static void simulateLoadDisembark(Station st, Train t) {
@@ -35,7 +27,6 @@ public class Helper {
         for (Load load : loads) {
             if (load.getLoadDestinationStationId().equals(st.getStationId())) {
                 t.delLoadFromTrain(load);
-                load.setLoadReachedDestination();
             }
         }
     }
@@ -45,15 +36,17 @@ public class Helper {
         for (Load load : loads) {
             if (doesTrainReachDestination(t, load) &&
             (t.getCargoWeightOfTrain() + load.getLoadWeight()) <= t.getMaxTrainLoad() &&
-            !load.hasLoadReachedDestination() && load.getLoadTrainAssigned() == null) {
+            load.getLoadTrainAssigned() == null) {
                 
-                boolean can = false;
-                if (load.getLoadType().equals("Passenger") && t.canPassengersBeOnThisTrain()) can = true;
-                else if (load.getLoadType().equals("Cargo") && t.canCargoBeOnThisTrain()) can = true;
-                else if (load.getLoadType().equals("PerishableCargo")
-                && t.canCargoBeOnThisTrain() && load.shouldPerishableBeEmbarked(t, st)) can = true; 
+                boolean embark = false;
+                if (load instanceof PassengerLoad && t.canPassengersBeOnThisTrain()) embark = true;
+                else if (load instanceof CargoLoad && t.canCargoBeOnThisTrain()) embark = true;
+                else if (load instanceof PerishableCargoLoad && t.canCargoBeOnThisTrain()) {
+                    PerishableCargoLoad oth = (PerishableCargoLoad) load;
+                    if (oth.shouldPerishableBeEmbarked(t, st)) embark = true;
+                }
 
-                if (can) {
+                if (embark) {
                     t.addLoadToTrain(load);
                     st.delLoadFromStation(load);
                     load.setLoadTrain(t.getTrainId());
@@ -79,7 +72,7 @@ public class Helper {
         return res;
     }
  
-    public static void fixDurabilityOfTrack(Train t, Track track) {
+    public static void fixDurabilityOfTrack(RepairTrain t, Track track) {
         int mech = t.getMechanicsOnTrain();
         System.out.println(mech);
         track.incDurabilityOfTrack(1 + mech*2);
