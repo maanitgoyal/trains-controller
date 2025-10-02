@@ -31,10 +31,17 @@ public interface InterfaceTrainAndCargo  {
         this.setSpeed(this.getOriginalSpeed());
     }
 
+    default public int getCargoWeightOfTrain() {
+        int s = 0;
+        for (Load load : this.getTrainLoads()) {
+            if (!(load instanceof PassengerLoad)) s += load.getLoadWeight();
+        }
+        return s;
+    }
+
     List<Load> getTrainLoads();
     Position getTrainPosition();
     double getSpeed();
     void setSpeed(double speed);
     double getOriginalSpeed();
-    int getCargoWeightOfTrain();
 }

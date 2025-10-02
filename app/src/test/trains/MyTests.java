@@ -20,7 +20,7 @@ public class MyTests {
         TrainsController controller = new TrainsController();
         controller.createStation("s1", "CentralStation", 0.0, 0.0);
         controller.createStation("s2", "CentralStation", 0.0, 12.0);
-        controller.createTrack("t1-2", "s1", "s2");
+        controller.createTrack("t1-2", "s1", "s2", true);
         controller.createCargo("s1", "s2", "c1", 1000);
         assertDoesNotThrow(() -> {
             controller.createTrain("train1", "BulletTrain", "s1", List.of("s1", "s2"));
@@ -54,7 +54,7 @@ public class MyTests {
         TrainsController controller = new TrainsController();
         controller.createStation("s1", "CentralStation", 0.0, 0.0);
         controller.createStation("s2", "CentralStation", 0.0, 12.0);
-        controller.createTrack("t1-2", "s1", "s2");
+        controller.createTrack("t1-2", "s1", "s2", true);
         controller.createCargo("s1", "s2", "c1", 1000);
         assertDoesNotThrow(() -> {
             controller.createTrain("train1", "BulletTrain", "s1", List.of("s1", "s2"));

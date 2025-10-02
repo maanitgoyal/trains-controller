@@ -149,15 +149,6 @@ public class Train {
         return s;
     }
 
-    public int getCargoWeightOfTrain() {
-        int s = 0;
-        for (Load load : loads) {
-            if (load.getLoadType().equals("Cargo") ||
-            load.getLoadType().equals("PerishableCargo")) s += load.getLoadWeight();
-        }
-        return s;
-    }
-
     public TrainInfoResponse getTrainInfoResponseOfTrain() {
         return new TrainInfoResponse(this.trainId, this.location, this.type, this.position, this.getLoadInfoResponsesOfTrain());
     }

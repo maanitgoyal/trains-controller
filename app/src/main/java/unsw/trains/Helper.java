@@ -19,7 +19,7 @@ public class Helper {
     public static void simulateLoadDisembark(Station st, Train t) {
         List<Load> loads = new ArrayList<>(t.getTrainLoads());
         for (Load load : loads) {
-            if (load.getLoadDestinationStationId().equals(st.getStationId())) {
+            if (Objects.equals(load.getLoadDestinationStationId(), st.getStationId())) {
                 t.delLoadFromTrain(load);
             }
         }
@@ -29,7 +29,7 @@ public class Helper {
         List<Load> loads = new ArrayList<>(st.getStationLoads());
         for (Load load : loads) {
             if (doesTrainReachDestination(t, load) &&
-            (t.getCargoWeightOfTrain() + load.getLoadWeight()) <= t.getMaxTrainLoad() &&
+            (t.getTotalLoadWeightOfTrain() + load.getLoadWeight()) <= t.getMaxTrainLoad() &&
             load.getLoadTrainAssigned() == null) {
                 
                 boolean embark = false;
@@ -66,15 +66,14 @@ public class Helper {
         return res;
     }
  
-    public static void fixDurabilityOfTrack(RepairTrain t, Track track) {
+    public static void fixDurabilityOfTrack(RepairTrain t, UnbrokenTrack track) {
         int mech = t.getMechanicsOnTrain();
-        System.out.println(mech);
         track.incDurabilityOfTrack(1 + mech*2);
         if (track.getDurability() == 10) track.setTrackType(TrackType.UNBROKEN);
     }
 
-    public static void trackSimulator(Train t, Track track) {
-        if (track.getTrackType() == TrackType.BROKEN || t.getType().equals("RepairTrain")) {
+    public static void trackSimulator(Train t, UnbrokenTrack track) {
+        if (track.getTrackType() != TrackType.UNBROKEN || t instanceof RepairTrain) {
             return;
         };
         int dec = (int) (1 + Math.ceil((double) t.getTotalLoadWeightOfTrain() / 1000));
@@ -161,48 +160,27 @@ public class Helper {
                 Helper.simulateLoadEmbark(stationCur, t);
                 t.setAtStation();
             }
-            boolean isCargo = false;
-            boolean isBullet = false;
-            if (t instanceof CargoTrain) {
-                CargoTrain oth = (CargoTrain) t;
-                oth.decreaseTrainSpeed();
-                isCargo = true;
-            }
-            else if (t instanceof BulletTrain) {
-                BulletTrain oth = (BulletTrain) t;
-                oth.decreaseTrainSpeed();
-                isBullet = true;
-            }
+            InterfaceTrainAndCargo canCarryCargo = (t instanceof InterfaceTrainAndCargo) ? (InterfaceTrainAndCargo) t : null;
 
+            if (canCarryCargo != null) canCarryCargo.decreaseTrainSpeed();
+            
             if (track != null && track.getTrackType() == TrackType.BROKEN && t instanceof RepairTrain) {
-                Helper.fixDurabilityOfTrack((RepairTrain)t, track);
+                Helper.fixDurabilityOfTrack((RepairTrain)t, (UnbrokenTrack) track);
             }
             
             if (currentTrainPosition.isInBound(destination, t.getSpeed())) {
                 t.setTrainPosition(destination);
-                t.setLastStationVisited(stationIdFinal);;
-                Helper.trackSimulator(t, track);
+                t.setLastStationVisited(stationIdFinal);
+                t.setLocation(stationIdFinal);
+                Helper.trackSimulator(t, (UnbrokenTrack) track);
                 Helper.simulateLoadDisembark(stationFinal, t);
-                if (isCargo) {
-                    CargoTrain oth = (CargoTrain) t;
-                    oth.resetSpeed();
-                }
-                else if (isBullet) {
-                    BulletTrain oth = (BulletTrain) t;
-                    oth.resetSpeed();
-                }
+                if (canCarryCargo != null) canCarryCargo.resetSpeed();
                 t.setAtStation();
                 continue;
             }
             t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));
-            if (isCargo) {
-                CargoTrain oth = (CargoTrain) t;
-                oth.removeExpiredCargo();
-            }
-            else if (isBullet) {
-                BulletTrain oth = (BulletTrain) t;
-                oth.removeExpiredCargo();
-            }
+            if (canCarryCargo != null) canCarryCargo.removeExpiredCargo();
+            t.setLocation(track.getTrackId());
         }
     }
 }

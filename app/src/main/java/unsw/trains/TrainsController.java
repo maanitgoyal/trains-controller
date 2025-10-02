@@ -24,7 +24,7 @@ public class TrainsController {
     }
 
     public void createTrack(String trackId, String fromStationId, String toStationId) {
-        Track tr = new Track(trackId, fromStationId, toStationId, false);
+        Track tr = new NormalTrack(trackId, fromStationId, toStationId);
         tracks.put(trackId, tr);
     }
 
@@ -92,7 +92,9 @@ public class TrainsController {
     }
     
     public void createTrack(String trackId, String fromStationId, String toStationId, boolean isBreakable) {
-        Track t = new Track(trackId, fromStationId, toStationId, isBreakable);
+        Track t;
+        if (isBreakable) t = new UnbrokenTrack(trackId, fromStationId, toStationId);
+        else t = new NormalTrack(trackId, fromStationId, toStationId);
         tracks.put(trackId, t);
     }
     

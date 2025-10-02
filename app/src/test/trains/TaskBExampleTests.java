@@ -110,4 +110,24 @@ public class TaskBExampleTests {
         // Train should not contain any cargo
         assertEquals(0, controller.getTrainInfo("train1").getLoads().size());
     }
+
+    @Test
+    public void loadNotCreated() {
+        TrainsController controller = new TrainsController();
+        controller.createStation("s1", "CentralStation", 0, 0);
+        controller.createStation("s2", "CentralStation", 0, 50);
+        controller.createTrack("t1-2", "s1", "s2");
+        controller.createCargo("s1", "s2", "c1", 5000);
+        controller.createCargo("s1", "s2", "c2", 5000);
+        assertDoesNotThrow(() -> {
+            controller.createTrain("train1", "BulletTrain", "s1", List.of("s1", "s2"));
+        });
+        // Check that the load was created at the station.
+        assertEquals(List.of(new LoadInfoResponse("c1", "Cargo"), new LoadInfoResponse("c2", "Cargo")), controller.getStationInfo("s1").getLoads());
+
+        // After the first tick, the train with id train1 should have picked only 1 cargo
+        controller.simulate();
+        assertEquals(1, controller.getStationInfo("s1").getLoads().size());
+        assertEquals(List.of(new LoadInfoResponse("c1", "Cargo")), controller.getTrainInfo("train1").getLoads());
+    }
 }
