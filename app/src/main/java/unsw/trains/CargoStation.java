@@ -9,8 +9,8 @@ public class CargoStation extends Station {
             type,
             new Position(x, y),
             4,
-            0,
-            Double.POSITIVE_INFINITY
+            false,
+            true
         );
     }
 }

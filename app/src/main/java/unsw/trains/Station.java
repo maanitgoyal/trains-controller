@@ -13,12 +13,12 @@ public class Station {
     private String stationId;
     private String type;
     private int maxTrains;
-    private double passengers;
-    private double cargo;
+    private boolean passengers;
+    private boolean cargo;
     private Position stationCoordinates;
     private List<Load> loads = new ArrayList<>();
 
-    public Station(String stationId, String type, Position pos, int maxTrains, double passengers, double cargo) {
+    public Station(String stationId, String type, Position pos, int maxTrains, boolean passengers, boolean cargo) {
         this.stationId = stationId;
         this.type = type;
         this.stationCoordinates = pos;
@@ -79,7 +79,7 @@ public class Station {
      * @return true if passengers are allowed, false otherwise
      */
     public boolean canPassengersBeOnThisStation() {
-        return this.passengers == Double.POSITIVE_INFINITY;
+        return this.passengers;
     }
 
     /**
@@ -88,7 +88,7 @@ public class Station {
      * @return true if cargo is allowed, false otherwise
      */
     public boolean canCargoBeOnThisStation() {
-        return this.cargo == Double.POSITIVE_INFINITY;
+        return this.cargo;
     }
 
     /**
@@ -106,8 +106,7 @@ public class Station {
      * @param ld the load to remove
      */
     public void delLoadFromStation(Load ld) {
-        if (loads.isEmpty())
-            return;
+        if (loads.isEmpty()) return;
         Iterator<Load> it = loads.iterator();
         while (it.hasNext()) {
             Load load = it.next();

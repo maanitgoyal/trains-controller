@@ -9,8 +9,8 @@ public class DepotStation extends Station {
             type,
             new Position(x, y),
             8,
-            0,
-            0
+            false,
+            false
         );
     }
 }

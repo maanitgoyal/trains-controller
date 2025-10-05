@@ -9,8 +9,8 @@ public class PassengerStation extends Station {
             type,
             new Position(x, y),
             2,
-            Double.POSITIVE_INFINITY,
-            0
+            true,
+            false
         );
     }
 }

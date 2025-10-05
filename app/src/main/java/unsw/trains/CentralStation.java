@@ -9,8 +9,8 @@ public class CentralStation extends Station {
             type,
             new Position(x, y),
             8,
-            Double.POSITIVE_INFINITY,
-            Double.POSITIVE_INFINITY
+            true,
+            true
         );
     }
 }

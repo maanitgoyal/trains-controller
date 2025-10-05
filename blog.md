@@ -52,3 +52,6 @@ Now i am gonna refactor Track.java. Create a setter for location of a train. Fin
 Day 5 - 02-10-2025
 My goal for today is to finish the assignment.
 I think I should make more subclasses for Load.java and Track.java. I should distribute the methods which are used by just subclass to subclass only. I have made three new subclass for Load.java and I have created an interface for Train.java which has all the functions which are used for trains carrying Cargo or PerishableCargo. Now I am refining simulate function and adding logic for going in reverse route. I have fixed the reverse logic as well and my code is working fine now. I am doing some more refining and I'll be done with my assignment soon. I think I am done. Now the only thing that is left is adding JavaDoc and creating an interface for PassengerTrain i think.
+
+Blog 4 - UML Diagram and Bug Testing
+I am making the UML diagram for my code. Its going good although i need to ask how to connect Station and Train class. I also need to check if I am checking if mechanics can only embark on RepairTrains or both repair trains and PassengerTrains. Also ask about how Helper file will be connected.
