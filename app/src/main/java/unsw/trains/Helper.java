@@ -2,7 +2,9 @@ package unsw.trains;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import unsw.exceptions.InvalidRouteException;
@@ -216,6 +218,42 @@ public class Helper {
     }
 
     /**
+     * Removes expired perishable cargo from the train and updates their positions
+     * and timers.
+     */
+    public static void removeExpiredCargo(HashMap<String, Train> trains, HashMap<String, Station> stations) {
+        for (Map.Entry<String, Train> entry : trains.entrySet()) {
+            Train t = entry.getValue();
+            Iterator<Load> it = t.getTrainLoads().iterator();
+            while (it.hasNext()) {
+                Load load = it.next();
+                if (load instanceof PerishableCargoLoad) {
+                    PerishableCargoLoad oth = (PerishableCargoLoad) load;
+                    if (oth.getMinsTillPerished() == 0) t.delLoadFromTrain(load);
+                    else {
+                        Position cor = t.getTrainPosition();
+                        oth.setLoadCurrPosition(cor);
+                        oth.decMinsTillPerished();
+                    }
+                }
+            }
+        }
+
+        for (Map.Entry<String, Station> entry: stations.entrySet()) {
+            Station st = entry.getValue();
+            Iterator<Load> it = st.getStationLoads().iterator();
+            while (it.hasNext()) {
+                Load load = it.next();
+                if (load instanceof PerishableCargoLoad) {
+                    PerishableCargoLoad oth = (PerishableCargoLoad) load;
+                    if (oth.getMinsTillPerished() == 0) st.delLoadFromStation(load);
+                    else oth.decMinsTillPerished();
+                }
+            }
+        }
+    }
+
+    /**
      * Simulates the movement and actions of all trains for one time step.
      * Handles embarking/disembarking, movement, and track/repair logic.
      *
@@ -225,6 +263,7 @@ public class Helper {
      */
     public static void helperSimulate(HashMap<String, Train> trains, HashMap<String, Station> stations,
             HashMap<String, Track> tracks) {
+        removeExpiredCargo(trains, stations);
         List<String> tr = new ArrayList<>(trains.keySet());
         tr.sort((t1, t2) -> t1.compareTo(t2));
         for (String id : tr) {
@@ -265,7 +304,6 @@ public class Helper {
                 continue;
             }
             t.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, t.getSpeed()));
-            if (canCarryCargo != null) canCarryCargo.removeExpiredCargo();
             t.setLocation(track.getTrackId());
         }
     }

@@ -1,31 +1,9 @@
 package unsw.trains;
 
-import java.util.Iterator;
 import java.util.List;
-
 import unsw.utils.Position;
 
 public interface InterfaceTrainAndCargo {
-    /**
-     * Removes expired perishable cargo from the train and updates their positions
-     * and timers.
-     */
-    default public void removeExpiredCargo() {
-        Iterator<Load> it = this.getTrainLoads().iterator();
-        while (it.hasNext()) {
-            Load load = it.next();
-            if (load instanceof PerishableCargoLoad) {
-                PerishableCargoLoad oth = (PerishableCargoLoad) load;
-                if (oth.getMinsTillPerished() == 0) it.remove();
-                else {
-                    Position cor = this.getTrainPosition();
-                    oth.setLoadCurrPosition(cor);
-                    oth.decMinsTillPerished();
-                }
-            }
-        }
-    }
-
     /**
      * Decreases the train's speed based on the cargo weight.
      */
