@@ -1,4 +1,4 @@
-package unsw.trains;
+package unsw.trains.Stations;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,6 +7,9 @@ import java.util.List;
 import unsw.response.models.LoadInfoResponse;
 import unsw.response.models.StationInfoResponse;
 import unsw.response.models.TrainInfoResponse;
+import unsw.trains.Helper;
+import unsw.trains.Loads.Load;
+import unsw.trains.Trains.Train;
 import unsw.utils.Position;
 
 public class Station {

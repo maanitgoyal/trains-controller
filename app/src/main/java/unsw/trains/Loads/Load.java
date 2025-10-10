@@ -1,8 +1,9 @@
-package unsw.trains;
+package unsw.trains.Loads;
 
 import java.util.HashMap;
 
 import unsw.response.models.LoadInfoResponse;
+import unsw.trains.Stations.Station;
 import unsw.utils.Position;
 
 public class Load {
@@ -11,7 +12,6 @@ public class Load {
     private String destStationId;
     private Position currPosition;
     private int weight;
-    private String trainAssigned = null;
 
     public Load(String startStationId, String destStationId, String loadId, String loadType, int weight,
             HashMap<String, Station> stations) {
@@ -75,25 +75,7 @@ public class Load {
     public int getLoadWeight() {
         return this.weight;
     }
-
-    /**
-     * Gets the ID of the train assigned to this load, if any.
-     * 
-     * @return the train ID or null if not assigned
-     */
-    public String getLoadTrainAssigned() {
-        return this.trainAssigned;
-    }
-
-    /**
-     * Sets the train assigned to this load.
-     * 
-     * @param t the train ID to assign
-     */
-    public void setLoadTrain(String t) {
-        this.trainAssigned = t;
-    }
-
+    
     /**
      * Creates a LoadInfoResponse object for this load.
      * 

@@ -1,4 +1,4 @@
-package unsw.trains;
+package unsw.trains.Tracks;
 
 import unsw.response.models.TrackInfoResponse;
 import unsw.utils.TrackType;

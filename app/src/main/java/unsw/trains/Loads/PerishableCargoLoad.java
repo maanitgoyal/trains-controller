@@ -1,7 +1,9 @@
-package unsw.trains;
+package unsw.trains.Loads;
 
 import java.util.HashMap;
 
+import unsw.trains.Stations.Station;
+import unsw.trains.Trains.Train;
 import unsw.utils.Position;
 
 public class PerishableCargoLoad extends Load {

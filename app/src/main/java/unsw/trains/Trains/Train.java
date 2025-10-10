@@ -1,4 +1,4 @@
-package unsw.trains;
+package unsw.trains.Trains;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,6 +6,7 @@ import java.util.List;
 import unsw.exceptions.InvalidRouteException;
 import unsw.response.models.LoadInfoResponse;
 import unsw.response.models.TrainInfoResponse;
+import unsw.trains.Loads.Load;
 import unsw.utils.Position;
 
 public class Train {

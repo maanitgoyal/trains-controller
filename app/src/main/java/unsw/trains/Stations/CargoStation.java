@@ -1,4 +1,4 @@
-package unsw.trains;
+package unsw.trains.Stations;
 
 import unsw.utils.Position;
 

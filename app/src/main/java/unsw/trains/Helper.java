@@ -7,6 +7,22 @@ import java.util.Map;
 import java.util.Objects;
 
 import unsw.exceptions.InvalidRouteException;
+import unsw.trains.Loads.CargoLoad;
+import unsw.trains.Loads.Load;
+import unsw.trains.Loads.PassengerLoad;
+import unsw.trains.Loads.PerishableCargoLoad;
+import unsw.trains.Stations.CargoStation;
+import unsw.trains.Stations.DepotStation;
+import unsw.trains.Stations.PassengerStation;
+import unsw.trains.Stations.Station;
+import unsw.trains.Tracks.Track;
+import unsw.trains.Tracks.UnbrokenTrack;
+import unsw.trains.Trains.BulletTrain;
+import unsw.trains.Trains.CargoTrain;
+import unsw.trains.Trains.InterfaceTrainAndCargo;
+import unsw.trains.Trains.PassengerTrain;
+import unsw.trains.Trains.RepairTrain;
+import unsw.trains.Trains.Train;
 import unsw.utils.Position;
 import unsw.utils.TrackType;
 
@@ -41,15 +57,13 @@ public class Helper {
      * Loads are added to the train if they are eligible and the train can carry
      * them.
      *
-     * @param st The station where loads may embark.
+     * @param st The station where loads may disembark.
      * @param t The train to which loads may embark.
      */
     public static void simulateLoadEmbark(Station st, Train t) {
         List<Load> loads = new ArrayList<>(st.getStationLoads());
         for (Load load : loads) {
-            if (doesTrainReachDestination(t, load)
-            && (t.getTotalLoadWeightOfTrain() + load.getLoadWeight()) <= t.getMaxTrainLoad()
-            && load.getLoadTrainAssigned() == null) {
+            if (doesTrainReachDestination(t, load) && (t.getTotalLoadWeightOfTrain() + load.getLoadWeight()) <= t.getMaxTrainLoad()) {
                 boolean embark = false;
                 if (load instanceof PassengerLoad && t.canPassengersBeOnThisTrain()) embark = true;
                 else if (load instanceof CargoLoad && t.canCargoBeOnThisTrain()) embark = true;
@@ -57,12 +71,7 @@ public class Helper {
                     PerishableCargoLoad oth = (PerishableCargoLoad) load;
                     if (oth.shouldPerishableBeEmbarked(t, st)) embark = true;
                 }
-
-                if (embark) {
-                    t.addLoadToTrain(load);
-                    st.delLoadFromStation(load);
-                    load.setLoadTrain(t.getTrainId());
-                }
+                if (embark) {t.addLoadToTrain(load); st.delLoadFromStation(load);}
             }
         }
     }

@@ -1,6 +1,9 @@
-package unsw.trains;
+package unsw.trains.Trains;
 
 import java.util.List;
+
+import unsw.trains.Loads.Load;
+import unsw.trains.Loads.PassengerLoad;
 import unsw.utils.Position;
 
 public interface InterfaceTrainAndCargo {

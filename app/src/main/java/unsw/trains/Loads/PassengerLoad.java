@@ -1,6 +1,8 @@
-package unsw.trains;
+package unsw.trains.Loads;
 
 import java.util.HashMap;
+
+import unsw.trains.Stations.Station;
 
 public class PassengerLoad extends Load {
     private boolean isMechanic;
