@@ -2,7 +2,6 @@ package unsw.trains;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -206,14 +205,13 @@ public class Helper {
                 nextStation = route.get(last - 1);
                 if (t.getAtStation()) t.setReverseRoute();
             } else nextStation = route.get(0);
-        } else if (last == 0 && t.getReverseRoute()) {
+        } 
+        else if (last == 0 && t.getReverseRoute()) {
             nextStation = route.get(1);
             if (t.getAtStation()) t.setReverseRoute();
-        } else if (!t.getReverseRoute()) {
-            nextStation = route.get(last + 1);
-        } else {
-            nextStation = route.get(last - 1);
-        }
+        } 
+        else if (!t.getReverseRoute()) nextStation = route.get(last + 1);
+        else nextStation = route.get(last - 1);
         return nextStation;
     }
 
@@ -224,16 +222,15 @@ public class Helper {
     public static void removeExpiredCargo(HashMap<String, Train> trains, HashMap<String, Station> stations) {
         for (Map.Entry<String, Train> entry : trains.entrySet()) {
             Train t = entry.getValue();
-            Iterator<Load> it = t.getTrainLoads().iterator();
-            while (it.hasNext()) {
-                Load load = it.next();
+            List<Load> loads = new ArrayList<>(t.getTrainLoads());
+            for (Load load : loads) {
                 if (load instanceof PerishableCargoLoad) {
                     PerishableCargoLoad oth = (PerishableCargoLoad) load;
+                    oth.decMinsTillPerished();
                     if (oth.getMinsTillPerished() == 0) t.delLoadFromTrain(load);
                     else {
                         Position cor = t.getTrainPosition();
                         oth.setLoadCurrPosition(cor);
-                        oth.decMinsTillPerished();
                     }
                 }
             }
@@ -241,13 +238,12 @@ public class Helper {
 
         for (Map.Entry<String, Station> entry: stations.entrySet()) {
             Station st = entry.getValue();
-            Iterator<Load> it = st.getStationLoads().iterator();
-            while (it.hasNext()) {
-                Load load = it.next();
+            List<Load> loads = new ArrayList<>(st.getStationLoads());
+            for (Load load : loads) {
                 if (load instanceof PerishableCargoLoad) {
                     PerishableCargoLoad oth = (PerishableCargoLoad) load;
+                    oth.decMinsTillPerished();
                     if (oth.getMinsTillPerished() == 0) st.delLoadFromStation(load);
-                    else oth.decMinsTillPerished();
                 }
             }
         }
