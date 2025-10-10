@@ -135,8 +135,7 @@ public class Station {
     public List<LoadInfoResponse> getLoadInfoResponsesofStation() {
         this.loads.sort((l1, l2) -> l1.getLoadId().compareTo(l2.getLoadId()));
         List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
-        for (Load ld : this.loads)
-            loadInfoResponses.add(ld.getLoadInfoResponseOfLoad());
+        for (Load ld : this.loads) loadInfoResponses.add(ld.getLoadInfoResponseOfLoad());
         return loadInfoResponses;
     }
 
@@ -150,8 +149,7 @@ public class Station {
     public List<TrainInfoResponse> getTrainInfoResponsesOnStation(List<Train> trains) {
         List<Train> tr = Helper.trainsOnStation(trains, this);
         List<TrainInfoResponse> trainInfoResponses = new ArrayList<>();
-        for (Train train : tr)
-            trainInfoResponses.add(train.getTrainInfoResponseOfTrain());
+        for (Train train : tr) trainInfoResponses.add(train.getTrainInfoResponseOfTrain());
         return trainInfoResponses;
     }
 
@@ -163,6 +161,6 @@ public class Station {
      */
     public StationInfoResponse getStationInfoResponseOfStation(List<Train> trains) {
         return new StationInfoResponse(stationId, type, stationCoordinates,
-                getLoadInfoResponsesofStation(), getTrainInfoResponsesOnStation(trains));
+            getLoadInfoResponsesofStation(), getTrainInfoResponsesOnStation(trains));
     }
 }

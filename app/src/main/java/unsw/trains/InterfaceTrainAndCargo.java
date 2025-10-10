@@ -16,9 +16,8 @@ public interface InterfaceTrainAndCargo {
             Load load = it.next();
             if (load instanceof PerishableCargoLoad) {
                 PerishableCargoLoad oth = (PerishableCargoLoad) load;
-                if (oth.getMinsTillPerished() == 0) {
-                    it.remove();
-                } else {
+                if (oth.getMinsTillPerished() == 0) it.remove();
+                else {
                     Position cor = this.getTrainPosition();
                     oth.setLoadCurrPosition(cor);
                     oth.decMinsTillPerished();
@@ -48,10 +47,7 @@ public interface InterfaceTrainAndCargo {
      */
     default public int getCargoWeightOfTrain() {
         int s = 0;
-        for (Load load : this.getTrainLoads()) {
-            if (!(load instanceof PassengerLoad))
-                s += load.getLoadWeight();
-        }
+        for (Load load : this.getTrainLoads()) if (!(load instanceof PassengerLoad)) s += load.getLoadWeight();
         return s;
     }
 

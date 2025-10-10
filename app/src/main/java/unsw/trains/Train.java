@@ -262,8 +262,7 @@ public class Train {
      */
     public int getTotalLoadWeightOfTrain() {
         int s = 0;
-        for (Load load : loads)
-            s += load.getLoadWeight();
+        for (Load load : loads) s += load.getLoadWeight();
         return s;
     }
 
@@ -285,8 +284,7 @@ public class Train {
     public List<LoadInfoResponse> getLoadInfoResponsesOfTrain() {
         this.loads.sort((l1, l2) -> l1.getLoadId().compareTo(l2.getLoadId()));
         List<LoadInfoResponse> loadInfoResponses = new ArrayList<>();
-        for (Load ld : this.loads)
-            loadInfoResponses.add(ld.getLoadInfoResponseOfLoad());
+        for (Load ld : this.loads) loadInfoResponses.add(ld.getLoadInfoResponseOfLoad());
         return loadInfoResponses;
     }
 }

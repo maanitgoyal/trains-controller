@@ -15,7 +15,6 @@ public class UnbrokenTrack extends Track {
      */
     public void decDurabilityOfTrack(int dec) {
         super.setDurability(Math.max(super.getDurability() - dec, 0));
-        ;
     }
 
     /**

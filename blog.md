@@ -55,3 +55,5 @@ I think I should make more subclasses for Load.java and Track.java. I should dis
 
 Blog 4 - UML Diagram and Bug Testing
 I am making the UML diagram for my code. Its going good although i need to ask how to connect Station and Train class. I also need to check if I am checking if mechanics can only embark on RepairTrains or both repair trains and PassengerTrains. Also ask about how Helper file will be connected.
+
+I tried to format my code using the Formatter but it messed up my style a lot. now fixing the style. Need to change the interface to abstract class.
