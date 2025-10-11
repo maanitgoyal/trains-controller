@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import unsw.exceptions.InvalidRouteException;
-import unsw.trains.Helper;
 import unsw.trains.Loads.Load;
 import unsw.trains.Loads.PassengerLoad;
 import unsw.trains.Tracks.Track;
@@ -17,9 +16,8 @@ public class RepairTrain extends Train {
             trainId,
             type,
             stationId,
-            Helper.isRouteValid(tracks, route),
+            isRouteValid(tracks, route),
             pos,
-            2,
             2,
             true,
             false,

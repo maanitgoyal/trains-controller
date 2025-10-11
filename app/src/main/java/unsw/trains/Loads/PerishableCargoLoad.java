@@ -35,14 +35,22 @@ public class PerishableCargoLoad extends Load {
      * station without perishing before arrival.
      * 
      * @param t The train to check.
-     * @param st The station to check.
+     * @param stations Hashmap of stations
      * @return true if the cargo can be embarked and reach before perishing, false
      *         otherwise
      */
-    public boolean shouldPerishableBeEmbarked(Train t, Station st) {
-        Position cur = this.getLoadCurrPosition();
-        if ((cur.distance(st.getStationCoordinates()) / t.getSpeed()) <= this.minsTillPerish)
-            return true;
-        return false;
+    public boolean shouldPerishableBeEmbarked(Train t, HashMap<String, Station> stations) {
+        double time = 0;
+        String cur = t.getLastStationVisited();
+        while (!cur.equals(this.getLoadDestinationStationId())) {
+            Station st = stations.get(cur);
+            Position pos = st.getStationCoordinates();
+            String next = t.findNextStationToVisit(cur);
+            Station stNext = stations.get(next);
+            double dist = pos.distance(stNext.getStationCoordinates());
+            time += (dist / t.getSpeed());
+            cur = next;
+        }
+        return time <= this.getMinsTillPerished();
     }
 }

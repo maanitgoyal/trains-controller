@@ -7,7 +7,6 @@ import java.util.List;
 import unsw.response.models.LoadInfoResponse;
 import unsw.response.models.StationInfoResponse;
 import unsw.response.models.TrainInfoResponse;
-import unsw.trains.Helper;
 import unsw.trains.Loads.Load;
 import unsw.trains.Trains.Train;
 import unsw.utils.Position;
@@ -20,6 +19,7 @@ public class Station {
     private boolean cargo;
     private Position stationCoordinates;
     private List<Load> loads = new ArrayList<>();
+    private List<Train> trains = new ArrayList<>();
 
     public Station(String stationId, String type, Position pos, int maxTrains, boolean passengers, boolean cargo) {
         this.stationId = stationId;
@@ -72,8 +72,8 @@ public class Station {
      * @param trains the list of all trains
      * @return true if the station is full, false otherwise
      */
-    public boolean checkIfStationIsFull(List<Train> trains) {
-        return Helper.trainsOnStation(trains, this).size() == this.maxTrains;
+    public boolean checkIfStationIsFull() {
+        return this.trains.size() == this.maxTrains;
     }
 
     /**
@@ -109,7 +109,6 @@ public class Station {
      * @param ld the load to remove
      */
     public void delLoadFromStation(Load ld) {
-        if (loads.isEmpty()) return;
         Iterator<Load> it = loads.iterator();
         while (it.hasNext()) {
             Load load = it.next();
@@ -118,6 +117,23 @@ public class Station {
                 break;
             }
         }
+    }
+
+    public void addTrainToStation(Train t) {
+        this.trains.add(t);
+    }
+
+    public void delTrainFromStation(Train t) {
+        Iterator<Train> it = trains.iterator();
+        while (it.hasNext()) {
+            Train tr = it.next();
+            if (tr.getTrainId().equals(t.getTrainId())) {it.remove(); break;}
+        }
+    }
+
+    public List<Train> getTrainsOnStation() {
+        this.trains.sort((t1, t2) -> t1.getTrainId().compareTo(t2.getTrainId()));
+        return this.trains;
     }
 
     /**
@@ -150,7 +166,7 @@ public class Station {
      * @return the list of TrainInfoResponse objects
      */
     public List<TrainInfoResponse> getTrainInfoResponsesOnStation(List<Train> trains) {
-        List<Train> tr = Helper.trainsOnStation(trains, this);
+        List<Train> tr = this.getTrainsOnStation();
         List<TrainInfoResponse> trainInfoResponses = new ArrayList<>();
         for (Train train : tr) trainInfoResponses.add(train.getTrainInfoResponseOfTrain());
         return trainInfoResponses;

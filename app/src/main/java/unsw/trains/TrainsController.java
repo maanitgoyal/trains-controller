@@ -3,6 +3,8 @@ package unsw.trains;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import unsw.exceptions.InvalidRouteException;
 import unsw.response.models.*;
@@ -10,11 +12,19 @@ import unsw.trains.Loads.CargoLoad;
 import unsw.trains.Loads.Load;
 import unsw.trains.Loads.PassengerLoad;
 import unsw.trains.Loads.PerishableCargoLoad;
+import unsw.trains.Stations.CargoStation;
+import unsw.trains.Stations.DepotStation;
+import unsw.trains.Stations.PassengerStation;
 import unsw.trains.Stations.Station;
 import unsw.trains.Tracks.NormalTrack;
 import unsw.trains.Tracks.Track;
 import unsw.trains.Tracks.UnbrokenTrack;
+import unsw.trains.Trains.BulletTrain;
+import unsw.trains.Trains.CargoTrain;
+import unsw.trains.Trains.PassengerTrain;
+import unsw.trains.Trains.RepairTrain;
 import unsw.trains.Trains.Train;
+import unsw.utils.Position;
 
 /**
  * The controller for the Trains system.
@@ -28,7 +38,12 @@ public class TrainsController {
     HashMap<String, Train> trains = new HashMap<>();
 
     public void createStation(String stationId, String type, double x, double y) {
-        Station st = Helper.createStationHelper(stationId, type, x, y);
+        Station st;
+        if (Objects.equals("PassengerStation", type)) st = new PassengerStation(stationId, type, x, y);
+        else if (Objects.equals("CargoStation", type)) st = new CargoStation(stationId, type, x, y);
+        else if (Objects.equals("DepotStation", type)) st = new DepotStation(stationId, type, x, y);
+        else if (Objects.equals("CentralStation", type)) st = new DepotStation(stationId, type, x, y);
+        else st = null;
         stations.put(stationId, st);
     }
 
@@ -39,7 +54,12 @@ public class TrainsController {
 
     public void createTrain(String trainId, String type, String stationId, List<String> route)
             throws InvalidRouteException {
-        Train t = Helper.createTrainHelper(trainId, type, stationId, route, tracks, stations);
+        Train t;
+        if (Objects.equals("PassengerTrain", type)) t = new PassengerTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
+        else if (Objects.equals("BulletTrain", type)) t = new BulletTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
+        else if (Objects.equals("CargoTrain", type)) t = new CargoTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
+        else if (Objects.equals("RepairTrain", type)) t = new RepairTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
+        else t = null;
         trains.put(trainId, t);
     }
 
@@ -67,8 +87,49 @@ public class TrainsController {
         return this.tracks.get(trackId).getTrackInfoResponseOfTrack();
     }
 
+    /**
+     * Removes expired perishable cargo from the train and updates their positions
+     * and timers.
+     */
+    public static void removeExpiredCargo(HashMap<String, Train> trains, HashMap<String, Station> stations) {
+        for (Map.Entry<String, Train> entry : trains.entrySet()) {
+            Train t = entry.getValue();
+            List<Load> loads = new ArrayList<>(t.getTrainLoads());
+            for (Load load : loads) {
+                if (load instanceof PerishableCargoLoad) {
+                    PerishableCargoLoad oth = (PerishableCargoLoad) load;
+                    oth.decMinsTillPerished();
+                    if (oth.getMinsTillPerished() == 0) t.delLoadFromTrain(load);
+                    else {
+                        Position cor = t.getTrainPosition();
+                        oth.setLoadCurrPosition(cor);
+                    }
+                }
+            }
+        }
+
+        for (Map.Entry<String, Station> entry: stations.entrySet()) {
+            Station st = entry.getValue();
+            List<Load> loads = new ArrayList<>(st.getStationLoads());
+            for (Load load : loads) {
+                if (load instanceof PerishableCargoLoad) {
+                    PerishableCargoLoad oth = (PerishableCargoLoad) load;
+                    oth.decMinsTillPerished();
+                    if (oth.getMinsTillPerished() == 0) st.delLoadFromStation(load);
+                }
+            }
+        }
+    }
+
     public void simulate() {
-        Helper.helperSimulate(trains, stations, tracks);
+        List<String> tr = new ArrayList<>(trains.keySet());
+        tr.sort((t1, t2) -> t1.compareTo(t2));
+        for (String id : tr) {
+            Train t = trains.get(id);
+            t.moveTrain(stations, tracks);
+
+        }
+        removeExpiredCargo(trains, stations);
     }
 
     /**
