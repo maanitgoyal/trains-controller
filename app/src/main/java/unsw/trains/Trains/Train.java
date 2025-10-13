@@ -391,7 +391,9 @@ public class Train {
         if (this.getAtStation()) {
             this.simulateLoadEmbark(stationCur, stations);
             this.setAtStation();
+            stationCur.delTrainFromStation(this);
         }
+
         IntermediateTrainAndCargo cargo = (this instanceof IntermediateTrainAndCargo) ? (IntermediateTrainAndCargo) this : null;
         
         if (track != null && track.getTrackType() == TrackType.BROKEN && this instanceof RepairTrain) {
@@ -411,6 +413,7 @@ public class Train {
                 }
                 cargo.simulateLoadDisembark(stationFinal);
                 cargo.setAtStation();
+                stationFinal.addTrainToStation(cargo);
                 return;
             }
             cargo.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, cargo.getSpeed()));
@@ -426,6 +429,7 @@ public class Train {
                 }
                 this.simulateLoadDisembark(stationFinal);
                 this.setAtStation();
+                stationFinal.addTrainToStation(this);
                 return;
             }
             this.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, this.getSpeed()));
