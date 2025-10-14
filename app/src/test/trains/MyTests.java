@@ -45,7 +45,7 @@ public class MyTests {
         controller.simulate(3);
         assertEquals(0, controller.getStationInfo("s1").getLoads().size());
     }
-    
+
     @Test
     public void testPerishableCargo() {
         TrainsController controller = new TrainsController();
