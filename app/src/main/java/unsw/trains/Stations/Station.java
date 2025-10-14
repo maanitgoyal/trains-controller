@@ -11,7 +11,7 @@ import unsw.trains.Loads.Load;
 import unsw.trains.Trains.Train;
 import unsw.utils.Position;
 
-public class Station {
+public abstract class Station {
     private String stationId;
     private String type;
     private int maxTrains;

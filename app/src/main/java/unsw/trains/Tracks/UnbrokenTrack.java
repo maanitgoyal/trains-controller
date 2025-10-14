@@ -5,6 +5,7 @@ import unsw.trains.Trains.Train;
 import unsw.utils.TrackType;
 
 public class UnbrokenTrack extends Track {
+    public static final int MECHANICS_REPAIR = 2;
     public UnbrokenTrack(String trackId, String fromStationId, String toStationId) {
         super(trackId, fromStationId, toStationId, TrackType.UNBROKEN);
     }
@@ -26,7 +27,7 @@ public class UnbrokenTrack extends Track {
      * @param inc the amount to increase
      */
     public void incDurabilityOfTrack(int inc) {
-        super.setDurability(Math.min(10, super.getDurability() + inc));
+        super.setDurability(Math.min(getMaxDurability(), super.getDurability() + inc));
     }
 
     /**
@@ -38,8 +39,8 @@ public class UnbrokenTrack extends Track {
      */
     public void fixDurabilityOfTrack(RepairTrain t) {
         int mech = t.getMechanicsOnTrain();
-        this.incDurabilityOfTrack(1 + mech * 2);
-        if (this.getDurability() == 10) this.setTrackType(TrackType.UNBROKEN);
+        this.incDurabilityOfTrack(1 + mech * MECHANICS_REPAIR);
+        if (this.getDurability() == getMaxDurability()) this.setTrackType(TrackType.UNBROKEN);
     }
 
     /**

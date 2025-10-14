@@ -8,6 +8,8 @@ import unsw.trains.Tracks.Track;
 import unsw.utils.Position;
 
 public class BulletTrain extends IntermediateTrainAndCargo {
+    private static final double MAX_SPEED = 5;
+    private static final int MAX_LOAD = 5000;
     public BulletTrain(String trainId, String type, String stationId, List<String> route, Position pos, HashMap<String,
     Track> tracks) throws InvalidRouteException {
         super(
@@ -17,10 +19,10 @@ public class BulletTrain extends IntermediateTrainAndCargo {
             route,
             pos,
             tracks,
-            5,
+            MAX_SPEED,
             true,
             true,
-            5000,
+            MAX_LOAD,
             true
         );
     }

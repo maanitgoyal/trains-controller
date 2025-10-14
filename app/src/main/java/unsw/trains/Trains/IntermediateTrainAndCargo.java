@@ -9,8 +9,8 @@ import unsw.trains.Loads.PassengerLoad;
 import unsw.trains.Tracks.Track;
 import unsw.utils.Position;
 
-public class IntermediateTrainAndCargo extends Train {
-
+public abstract class IntermediateTrainAndCargo extends Train {
+    private static final double SPEED_REDUCTION = 0.01;
     public IntermediateTrainAndCargo(String trainId, String type, String stationId, List<String> route,
     Position pos, HashMap<String, Track> tracks, double speed, boolean passengers, boolean cargo,
     int maxLoad, boolean circularRoute) throws InvalidRouteException {
@@ -34,6 +34,6 @@ public class IntermediateTrainAndCargo extends Train {
      */
     @Override
     public double getSpeed() {
-        return super.getSpeed() * (1 - ((this.getCargoWeightOfTrain()) * 0.01) / 100);
+        return super.getSpeed() * (1 - ((this.getCargoWeightOfTrain()) * SPEED_REDUCTION) / 100);
     }
 }

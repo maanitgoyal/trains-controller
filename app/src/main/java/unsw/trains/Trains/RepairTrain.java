@@ -10,6 +10,8 @@ import unsw.trains.Tracks.Track;
 import unsw.utils.Position;
 
 public class RepairTrain extends Train {
+    private static final double MAX_SPEED = 2;
+    private static final int MAX_LOAD = 3500;
     public RepairTrain(String trainId, String type, String stationId, List<String> route, Position pos,
             HashMap<String, Track> tracks) throws InvalidRouteException {
         super(
@@ -18,10 +20,10 @@ public class RepairTrain extends Train {
             stationId,
             isRouteValid(tracks, route),
             pos,
-            2,
+            MAX_SPEED,
             true,
             false,
-            3500,
+            MAX_LOAD,
             false
         );
     }

@@ -19,7 +19,7 @@ import unsw.trains.Tracks.UnbrokenTrack;
 import unsw.utils.Position;
 import unsw.utils.TrackType;
 
-public class Train {
+public abstract class Train {
     private String trainId;
     private String type;
     private String lastStationVisited;

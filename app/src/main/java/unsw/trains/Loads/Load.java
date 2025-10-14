@@ -6,7 +6,7 @@ import unsw.response.models.LoadInfoResponse;
 import unsw.trains.Stations.Station;
 import unsw.utils.Position;
 
-public class Load {
+public abstract class Load {
     private String loadId;
     private String loadType;
     private String destStationId;

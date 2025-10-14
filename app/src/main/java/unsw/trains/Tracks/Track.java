@@ -3,18 +3,19 @@ package unsw.trains.Tracks;
 import unsw.response.models.TrackInfoResponse;
 import unsw.utils.TrackType;
 
-public class Track {
+public abstract class Track {
     private String trackId;
     private String fromStationId;
     private String toStationId;
     private int durability;
     private TrackType trackType;
+    private static final int MAX_DURABILITY = 10;
 
     public Track(String trackId, String fromStationId, String toStationId, TrackType type) {
         this.trackId = trackId;
         this.fromStationId = fromStationId;
         this.toStationId = toStationId;
-        this.durability = 10;
+        this.durability = MAX_DURABILITY;
         this.trackType = type;
     }
 
@@ -61,6 +62,15 @@ public class Track {
      */
     public TrackType getTrackType() {
         return this.trackType;
+    }
+
+    /**
+     * Gets the MAX_DURABILITY of the track.
+     *
+     * @return the MAX_DURABILITY
+     */
+    public int getMaxDurability() {
+        return MAX_DURABILITY;
     }
 
     /**
