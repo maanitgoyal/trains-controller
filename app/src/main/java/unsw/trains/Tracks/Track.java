@@ -65,15 +65,6 @@ public abstract class Track {
     }
 
     /**
-     * Gets the MAX_DURABILITY of the track.
-     *
-     * @return the MAX_DURABILITY
-     */
-    public int getMaxDurability() {
-        return MAX_DURABILITY;
-    }
-
-    /**
      * Sets the durability of the track.
      *
      * @param dur the durability value to set
