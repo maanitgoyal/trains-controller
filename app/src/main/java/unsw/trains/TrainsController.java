@@ -33,9 +33,9 @@ import unsw.utils.Position;
  */
 public class TrainsController {
     // Add any fields here if necessary
-    HashMap<String, Station> stations = new HashMap<>();
-    HashMap<String, Track> tracks = new HashMap<>();
-    HashMap<String, Train> trains = new HashMap<>();
+    private HashMap<String, Station> stations = new HashMap<>();
+    private HashMap<String, Track> tracks = new HashMap<>();
+    private HashMap<String, Train> trains = new HashMap<>();
 
     public void createStation(String stationId, String type, double x, double y) {
         Station st;
@@ -55,10 +55,14 @@ public class TrainsController {
     public void createTrain(String trainId, String type, String stationId, List<String> route)
             throws InvalidRouteException {
         Train t;
-        if (Objects.equals("PassengerTrain", type)) t = new PassengerTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
-        else if (Objects.equals("BulletTrain", type)) t = new BulletTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
-        else if (Objects.equals("CargoTrain", type)) t = new CargoTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
-        else if (Objects.equals("RepairTrain", type)) t = new RepairTrain(trainId, type, stationId, route, stations.get(stationId).getStationCoordinates(), tracks);
+        if (Objects.equals("PassengerTrain", type)) t = new PassengerTrain(trainId, type, stationId, route,
+        stations.get(stationId).getStationCoordinates(), tracks);
+        else if (Objects.equals("BulletTrain", type)) t = new BulletTrain(trainId, type, stationId, route,
+        stations.get(stationId).getStationCoordinates(), tracks);
+        else if (Objects.equals("CargoTrain", type)) t = new CargoTrain(trainId, type, stationId, route,
+        stations.get(stationId).getStationCoordinates(), tracks);
+        else if (Objects.equals("RepairTrain", type)) t = new RepairTrain(trainId, type, stationId, route,
+        stations.get(stationId).getStationCoordinates(), tracks);
         else t = null;
         trains.put(trainId, t);
     }
@@ -147,27 +151,28 @@ public class TrainsController {
         Station st = stations.get(startStationId);
         st.addLoadToStation(ld);
     }
-    
+
     public void createCargo(String startStationId, String destStationId, String cargoId, int weight) {
         Load ld = new CargoLoad(startStationId, destStationId, cargoId, "Cargo", weight, stations);
         Station st = stations.get(startStationId);
         st.addLoadToStation(ld);
     }
-    
+
     public void createPerishableCargo(String startStationId, String destStationId, String cargoId, int weight,
     int minsTillPerish) {
-        Load ld = new PerishableCargoLoad(startStationId, destStationId, cargoId, "PerishableCargo", weight, minsTillPerish, stations);
+        Load ld = new PerishableCargoLoad(startStationId, destStationId, cargoId, "PerishableCargo", weight,
+        minsTillPerish, stations);
         Station st = stations.get(startStationId);
         st.addLoadToStation(ld);
     }
-    
+
     public void createTrack(String trackId, String fromStationId, String toStationId, boolean isBreakable) {
         Track t;
         if (isBreakable) t = new UnbrokenTrack(trackId, fromStationId, toStationId);
         else t = new NormalTrack(trackId, fromStationId, toStationId);
         tracks.put(trackId, t);
     }
-    
+
     public void createPassenger(String startStationId, String destStationId, String passengerId, boolean isMechanic) {
         Load ld = new PassengerLoad(startStationId, destStationId, passengerId, "Passenger", 70, isMechanic, stations);
         Station st = stations.get(startStationId);

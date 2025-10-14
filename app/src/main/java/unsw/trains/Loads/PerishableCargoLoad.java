@@ -9,14 +9,15 @@ import unsw.utils.Position;
 public class PerishableCargoLoad extends Load {
     private int minsTillPerish;
 
-    public PerishableCargoLoad(String startStationId, String destStationId, String loadId, String loadType, int weight, int minsTillPerish, HashMap<String, Station> stations) {
+    public PerishableCargoLoad(String startStationId, String destStationId, String loadId, String loadType, int weight,
+    int minsTillPerish, HashMap<String, Station> stations) {
         super(startStationId, destStationId, loadId, loadType, weight, stations);
         this.minsTillPerish = minsTillPerish;
     }
 
     /**
      * Gets the number of minutes until the cargo perishes.
-     * 
+     *
      * @return minutes until perish
      */
     public int getMinsTillPerished() {
@@ -33,7 +34,7 @@ public class PerishableCargoLoad extends Load {
     /**
      * Determines if the perishable cargo can be embarked on the train at the
      * station without perishing before arrival.
-     * 
+     *
      * @param t The train to check.
      * @param stations Hashmap of stations
      * @return true if the cargo can be embarked and reach before perishing, false

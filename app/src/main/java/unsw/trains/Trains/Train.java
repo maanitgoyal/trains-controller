@@ -53,7 +53,7 @@ public class Train {
 
     /**
      * Gets the unique identifier of the train.
-     * 
+     *
      * @return the train ID
      */
     public String getTrainId() {
@@ -62,7 +62,7 @@ public class Train {
 
     /**
      * Sets the current location of the train.
-     * 
+     *
      * @param loc the location to set
      */
     public void setLocation(String loc) {
@@ -71,7 +71,7 @@ public class Train {
 
     /**
      * Gets the current location of the train.
-     * 
+     *
      * @return the location
      */
     public String getLocation() {
@@ -80,7 +80,7 @@ public class Train {
 
     /**
      * Gets the type of the train.
-     * 
+     *
      * @return the train type
      */
     public String getType() {
@@ -89,7 +89,7 @@ public class Train {
 
     /**
      * Gets the current position of the train.
-     * 
+     *
      * @return the train's position
      */
     public Position getTrainPosition() {
@@ -98,7 +98,7 @@ public class Train {
 
     /**
      * Sets the current position of the train.
-     * 
+     *
      * @param newPos the new position to set
      */
     public void setTrainPosition(Position newPos) {
@@ -107,7 +107,7 @@ public class Train {
 
     /**
      * Gets the ID of the last station visited by the train.
-     * 
+     *
      * @return the last station ID
      */
     public String getLastStationVisited() {
@@ -116,7 +116,7 @@ public class Train {
 
     /**
      * Sets the last station visited by the train.
-     * 
+     *
      * @param st the station ID to set
      */
     public void setLastStationVisited(String st) {
@@ -125,16 +125,16 @@ public class Train {
 
     /**
      * Gets the route of the train as a list of station IDs.
-     * 
+     *
      * @return the route list
      */
     public List<String> getRoute() {
         return this.route;
     }
-    
+
     /**
      * Gets the current speed of the train.
-     * 
+     *
      * @return the current speed
      */
     public double getSpeed() {
@@ -143,7 +143,7 @@ public class Train {
 
     /**
      * Checks if the train's route is circular.
-     * 
+     *
      * @return true if the route is circular, false otherwise
      */
     public boolean isCircular() {
@@ -152,7 +152,7 @@ public class Train {
 
     /**
      * Checks if the train is currently set to reverse its route.
-     * 
+     *
      * @return true if reversing, false otherwise
      */
     public boolean getReverseRoute() {
@@ -168,7 +168,7 @@ public class Train {
 
     /**
      * Adds a load to the train.
-     * 
+     *
      * @param ld the load to add
      */
     public void addLoadToTrain(Load ld) {
@@ -177,7 +177,7 @@ public class Train {
 
     /**
      * Removes a load from the train by its ID.
-     * 
+     *
      * @param ld the load to remove
      */
     public void delLoadFromTrain(Load ld) {
@@ -196,7 +196,7 @@ public class Train {
 
     /**
      * Gets the maximum load weight the train can carry.
-     * 
+     *
      * @return the maximum load weight
      */
     public int getMaxTrainLoad() {
@@ -205,7 +205,7 @@ public class Train {
 
     /**
      * Gets the list of loads currently on the train.
-     * 
+     *
      * @return the list of loads
      */
     public List<Load> getTrainLoads() {
@@ -214,7 +214,7 @@ public class Train {
 
     /**
      * Checks if passengers are allowed on this train.
-     * 
+     *
      * @return true if passengers are allowed, false otherwise
      */
     public boolean canPassengersBeOnThisTrain() {
@@ -223,7 +223,7 @@ public class Train {
 
     /**
      * Checks if the train is currently at a station.
-     * 
+     *
      * @return true if at a station, false otherwise
      */
     public boolean getAtStation() {
@@ -239,7 +239,7 @@ public class Train {
 
     /**
      * Checks if cargo is allowed on this train.
-     * 
+     *
      * @return true if cargo is allowed, false otherwise
      */
     public boolean canCargoBeOnThisTrain() {
@@ -248,7 +248,7 @@ public class Train {
 
     /**
      * Gets the total weight of all loads currently on the train.
-     * 
+     *
      * @return the total load weight
      */
     public int getTotalLoadWeightOfTrain() {
@@ -274,12 +274,10 @@ public class Train {
                 nextStation = route.get(last - 1);
                 if (this.getAtStation()) this.setReverseRoute();
             } else nextStation = route.get(0);
-        } 
-        else if (last == 0 && this.getReverseRoute()) {
+        } else if (last == 0 && this.getReverseRoute()) {
             nextStation = route.get(1);
             if (this.getAtStation()) this.setReverseRoute();
-        } 
-        else if (!this.getReverseRoute()) nextStation = route.get(last + 1);
+        } else if (!this.getReverseRoute()) nextStation = route.get(last + 1);
         else nextStation = route.get(last - 1);
         return nextStation;
     }
@@ -336,7 +334,8 @@ public class Train {
     public void simulateLoadEmbark(Station st, HashMap<String, Station> stations) {
         List<Load> loads = new ArrayList<>(st.getStationLoads());
         for (Load load : loads) {
-            if (doesTrainReachDestination(load) && (this.getTotalLoadWeightOfTrain() + load.getLoadWeight()) <= this.getMaxTrainLoad()) {
+            if (doesTrainReachDestination(load) && (this.getTotalLoadWeightOfTrain()
+            + load.getLoadWeight()) <= this.getMaxTrainLoad()) {
                 boolean embark = false;
                 if (load instanceof PassengerLoad && this.canPassengersBeOnThisTrain()) embark = true;
                 else if (load instanceof CargoLoad && this.canCargoBeOnThisTrain()) embark = true;
@@ -344,11 +343,14 @@ public class Train {
                     PerishableCargoLoad oth = (PerishableCargoLoad) load;
                     if (oth.shouldPerishableBeEmbarked(this, stations)) embark = true;
                 }
-                if (embark) {this.addLoadToTrain(load); st.delLoadFromStation(load);}
+                if (embark) {
+                    this.addLoadToTrain(load);
+                    st.delLoadFromStation(load);
+                }
             }
         }
     }
-    
+
     /**
      * Checks if a route is valid (not circular) given the tracks.
      *
@@ -380,11 +382,11 @@ public class Train {
         Station stationCur = stations.get(stationIdCur);
         String stationIdFinal = this.findNextStationToVisit(stationIdCur);
         Station stationFinal = stations.get(stationIdFinal);
-        
+
         if (stationFinal.checkIfStationIsFull()) return;
         Track track = isThereATrack(tracks, stationIdCur, stationIdFinal);
         if (track != null && track.getTrackType() == TrackType.BROKEN && !(this instanceof RepairTrain)) return;
-        
+
         Position destination = stationFinal.getStationCoordinates();
         Position currentTrainPosition = this.getTrainPosition();
 
@@ -395,13 +397,13 @@ public class Train {
         }
 
         IntermediateTrainAndCargo cargo = (this instanceof IntermediateTrainAndCargo) ? (IntermediateTrainAndCargo) this : null;
-        
+
         if (track != null && track.getTrackType() == TrackType.BROKEN && this instanceof RepairTrain) {
             UnbrokenTrack oth = (UnbrokenTrack) track;
             oth.fixDurabilityOfTrack((RepairTrain) this);
             return;
         }
-        
+
         if (cargo != null) {
             if (currentTrainPosition.isInBound(destination, cargo.getSpeed())) {
                 cargo.setTrainPosition(destination);
@@ -435,11 +437,10 @@ public class Train {
             this.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, this.getSpeed()));
             this.setLocation(track.getTrackId());
         }
-        
     }
     /**
      * Creates a TrainInfoResponse object for this train.
-     * 
+     *
      * @return a TrainInfoResponse containing train details
      */
     public TrainInfoResponse getTrainInfoResponseOfTrain() {
@@ -449,7 +450,7 @@ public class Train {
 
     /**
      * Gets a list of LoadInfoResponse objects for all loads currently on the train.
-     * 
+     *
      * @return the list of LoadInfoResponse objects
      */
     public List<LoadInfoResponse> getLoadInfoResponsesOfTrain() {

@@ -28,7 +28,7 @@ public class RepairTrain extends Train {
 
     /**
      * Gets the number of mechanics currently on the train.
-     * 
+     *
      * @return the number of mechanics
      */
     public int getMechanicsOnTrain() {

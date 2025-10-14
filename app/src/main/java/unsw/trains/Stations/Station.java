@@ -32,7 +32,7 @@ public class Station {
 
     /**
      * Gets the unique identifier of the station.
-     * 
+     *
      * @return the station ID
      */
     public String getStationId() {
@@ -41,7 +41,7 @@ public class Station {
 
     /**
      * Gets the type of the station.
-     * 
+     *
      * @return the station type
      */
     public String getStationType() {
@@ -50,7 +50,7 @@ public class Station {
 
     /**
      * Gets the coordinates of the station.
-     * 
+     *
      * @return the station's position
      */
     public Position getStationCoordinates() {
@@ -59,7 +59,7 @@ public class Station {
 
     /**
      * Gets the maximum number of trains allowed at this station.
-     * 
+     *
      * @return the maximum number of trains
      */
     public int getMaxTrains() {
@@ -68,7 +68,7 @@ public class Station {
 
     /**
      * Checks if the station is full given the list of trains.
-     * 
+     *
      * @param trains the list of all trains
      * @return true if the station is full, false otherwise
      */
@@ -78,7 +78,7 @@ public class Station {
 
     /**
      * Checks if passengers can be on this station.
-     * 
+     *
      * @return true if passengers are allowed, false otherwise
      */
     public boolean canPassengersBeOnThisStation() {
@@ -87,7 +87,7 @@ public class Station {
 
     /**
      * Checks if cargo can be on this station.
-     * 
+     *
      * @return true if cargo is allowed, false otherwise
      */
     public boolean canCargoBeOnThisStation() {
@@ -96,7 +96,7 @@ public class Station {
 
     /**
      * Adds a load to the station.
-     * 
+     *
      * @param ld the load to add
      */
     public void addLoadToStation(Load ld) {
@@ -105,7 +105,7 @@ public class Station {
 
     /**
      * Removes a load from the station by its ID.
-     * 
+     *
      * @param ld the load to remove
      */
     public void delLoadFromStation(Load ld) {
@@ -127,7 +127,10 @@ public class Station {
         Iterator<Train> it = trains.iterator();
         while (it.hasNext()) {
             Train tr = it.next();
-            if (tr.getTrainId().equals(t.getTrainId())) {it.remove(); break;}
+            if (tr.getTrainId().equals(t.getTrainId())) {
+                it.remove();
+                break;
+            }
         }
     }
 
@@ -138,7 +141,7 @@ public class Station {
 
     /**
      * Gets the list of loads currently at the station, sorted by load ID.
-     * 
+     *
      * @return the list of loads
      */
     public List<Load> getStationLoads() {
@@ -148,7 +151,7 @@ public class Station {
 
     /**
      * Gets a list of LoadInfoResponse objects for all loads at the station.
-     * 
+     *
      * @return the list of LoadInfoResponse objects
      */
     public List<LoadInfoResponse> getLoadInfoResponsesofStation() {
@@ -161,7 +164,7 @@ public class Station {
     /**
      * Gets a list of TrainInfoResponse objects for all trains currently at the
      * station.
-     * 
+     *
      * @param trains the list of all trains
      * @return the list of TrainInfoResponse objects
      */
@@ -174,7 +177,7 @@ public class Station {
 
     /**
      * Creates a StationInfoResponse object for this station.
-     * 
+     *
      * @param trains the list of all trains
      * @return a StationInfoResponse containing station details
      */

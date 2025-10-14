@@ -19,7 +19,7 @@ public class IntermediateTrainAndCargo extends Train {
 
     /**
      * Calculates the total weight of cargo (excluding passengers) on the train.
-     * 
+     *
      * @return the total cargo weight
      */
     public int getCargoWeightOfTrain() {

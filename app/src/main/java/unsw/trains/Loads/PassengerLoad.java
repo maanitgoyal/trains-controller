@@ -15,7 +15,7 @@ public class PassengerLoad extends Load {
 
     /**
      * Checks if the passenger is a mechanic.
-     * 
+     *
      * @return true if the passenger is a mechanic, false otherwise
      */
     public boolean isPassengerMechanic() {

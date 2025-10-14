@@ -20,7 +20,7 @@ public class Track {
 
     /**
      * Gets the unique identifier of the track.
-     * 
+     *
      * @return the track ID
      */
     public String getTrackId() {
@@ -29,7 +29,7 @@ public class Track {
 
     /**
      * Gets the ID of the station from which the track starts.
-     * 
+     *
      * @return the from-station ID
      */
     public String getFromStationId() {
@@ -38,7 +38,7 @@ public class Track {
 
     /**
      * Gets the ID of the station to which the track leads.
-     * 
+     *
      * @return the to-station ID
      */
     public String getToStationId() {
@@ -47,7 +47,7 @@ public class Track {
 
     /**
      * Sets the type of the track.
-     * 
+     *
      * @param type the track type to set
      */
     public void setTrackType(TrackType type) {
@@ -56,7 +56,7 @@ public class Track {
 
     /**
      * Gets the type of the track.
-     * 
+     *
      * @return the track type
      */
     public TrackType getTrackType() {
@@ -65,7 +65,7 @@ public class Track {
 
     /**
      * Sets the durability of the track.
-     * 
+     *
      * @param dur the durability value to set
      */
     public void setDurability(int dur) {
@@ -74,7 +74,7 @@ public class Track {
 
     /**
      * Gets the durability of the track.
-     * 
+     *
      * @return the durability value
      */
     public int getDurability() {
@@ -83,7 +83,7 @@ public class Track {
 
     /**
      * Creates a TrackInfoResponse object for this track.
-     * 
+     *
      * @return a TrackInfoResponse containing track details
      */
     public TrackInfoResponse getTrackInfoResponseOfTrack() {

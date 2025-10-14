@@ -122,7 +122,8 @@ public class TaskBExampleTests {
             controller.createTrain("train1", "BulletTrain", "s1", List.of("s1", "s2"));
         });
         // Check that the load was created at the station.
-        assertEquals(List.of(new LoadInfoResponse("c1", "Cargo"), new LoadInfoResponse("c2", "Cargo")), controller.getStationInfo("s1").getLoads());
+        assertEquals(List.of(new LoadInfoResponse("c1", "Cargo"), new LoadInfoResponse("c2", "Cargo")),
+        controller.getStationInfo("s1").getLoads());
 
         // After the first tick, the train with id train1 should have picked only 1 cargo
         controller.simulate();

@@ -24,7 +24,7 @@ public class Load {
 
     /**
      * Gets the unique identifier of the load.
-     * 
+     *
      * @return the load ID
      */
     public String getLoadId() {
@@ -33,7 +33,7 @@ public class Load {
 
     /**
      * Gets the type of the load.
-     * 
+     *
      * @return the load type
      */
     public String getLoadType() {
@@ -42,7 +42,7 @@ public class Load {
 
     /**
      * Gets the destination station ID for this load.
-     * 
+     *
      * @return the destination station ID
      */
     public String getLoadDestinationStationId() {
@@ -51,7 +51,7 @@ public class Load {
 
     /**
      * Sets the current position of the load.
-     * 
+     *
      * @param newPos the new position to set
      */
     public void setLoadCurrPosition(Position newPos) {
@@ -60,7 +60,7 @@ public class Load {
 
     /**
      * Gets the current position of the load.
-     * 
+     *
      * @return a copy of the current position
      */
     public Position getLoadCurrPosition() {
@@ -69,16 +69,16 @@ public class Load {
 
     /**
      * Gets the weight of the load.
-     * 
+     *
      * @return the load weight
      */
     public int getLoadWeight() {
         return this.weight;
     }
-    
+
     /**
      * Creates a LoadInfoResponse object for this load.
-     * 
+     *
      * @return a LoadInfoResponse containing the load's ID and type
      */
     public LoadInfoResponse getLoadInfoResponseOfLoad() {

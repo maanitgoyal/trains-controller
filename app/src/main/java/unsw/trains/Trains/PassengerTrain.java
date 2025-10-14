@@ -8,7 +8,8 @@ import unsw.trains.Tracks.Track;
 import unsw.utils.Position;
 
 public class PassengerTrain extends Train {
-    public PassengerTrain(String trainId, String type, String stationId, List<String> route, Position pos, HashMap<String, Track> tracks) throws InvalidRouteException {
+    public PassengerTrain(String trainId, String type, String stationId, List<String> route, Position pos, HashMap<String,
+    Track> tracks) throws InvalidRouteException {
         super(
             trainId,
             type,
