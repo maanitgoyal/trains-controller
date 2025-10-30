@@ -13,7 +13,7 @@ import unsw.response.models.LoadInfoResponse;
 import unsw.trains.TrainsController;
 import unsw.utils.TrackType;
 
-// @Timeout(value = 5, unit = TimeUnit.SECONDS, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
+@Timeout(value = 5, unit = TimeUnit.SECONDS, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 public class MyTests {
     // Write your tests here
     @Test
