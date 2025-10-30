@@ -3,7 +3,7 @@ package unsw.trains.Stations;
 import unsw.utils.Position;
 
 public class PassengerStation extends Station {
-    private static final int MAX_TRAINS = 4;
+    private static final int MAX_TRAINS = 2;
     public PassengerStation(String stationId, String type, double x, double y) {
         super(
             stationId,

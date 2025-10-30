@@ -13,6 +13,7 @@ import unsw.trains.Loads.Load;
 import unsw.trains.Loads.PassengerLoad;
 import unsw.trains.Loads.PerishableCargoLoad;
 import unsw.trains.Stations.CargoStation;
+import unsw.trains.Stations.CentralStation;
 import unsw.trains.Stations.DepotStation;
 import unsw.trains.Stations.PassengerStation;
 import unsw.trains.Stations.Station;
@@ -42,7 +43,7 @@ public class TrainsController {
         if (Objects.equals("PassengerStation", type)) st = new PassengerStation(stationId, type, x, y);
         else if (Objects.equals("CargoStation", type)) st = new CargoStation(stationId, type, x, y);
         else if (Objects.equals("DepotStation", type)) st = new DepotStation(stationId, type, x, y);
-        else if (Objects.equals("CentralStation", type)) st = new DepotStation(stationId, type, x, y);
+        else if (Objects.equals("CentralStation", type)) st = new CentralStation(stationId, type, x, y);
         else st = null;
         stations.put(stationId, st);
     }
@@ -65,6 +66,7 @@ public class TrainsController {
         stations.get(stationId).getStationCoordinates(), tracks);
         else t = null;
         trains.put(trainId, t);
+        stations.get(stationId).addTrainToStation(t);
     }
 
     public List<String> listStationIds() {

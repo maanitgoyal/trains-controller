@@ -14,7 +14,7 @@ public abstract class IntermediateTrainAndCargo extends Train {
     public IntermediateTrainAndCargo(String trainId, String type, String stationId, List<String> route,
     Position pos, HashMap<String, Track> tracks, double speed, boolean passengers, boolean cargo,
     int maxLoad, boolean circularRoute) throws InvalidRouteException {
-        super(trainId, type, stationId, isRouteValid(tracks, route), pos, speed, passengers, cargo, maxLoad, circularRoute);
+        super(trainId, type, stationId, route, pos, speed, passengers, cargo, maxLoad, circularRoute);
     }
 
     /**

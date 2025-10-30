@@ -16,7 +16,7 @@ public class CargoTrain extends IntermediateTrainAndCargo {
             trainId,
             type,
             stationId,
-            route,
+            isRouteValid(tracks, route),
             pos,
             tracks,
             MAX_SPEED,

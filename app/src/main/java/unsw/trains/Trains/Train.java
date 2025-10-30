@@ -385,10 +385,14 @@ public abstract class Train {
 
         if (stationFinal.checkIfStationIsFull()) return;
         Track track = isThereATrack(tracks, stationIdCur, stationIdFinal);
-        if (track != null && track.getTrackType() == TrackType.BROKEN && !(this instanceof RepairTrain)) return;
 
         Position destination = stationFinal.getStationCoordinates();
         Position currentTrainPosition = this.getTrainPosition();
+
+        if (track != null && track.getTrackType() == TrackType.BROKEN && !(this instanceof RepairTrain)) {
+            UnbrokenTrack oth = (UnbrokenTrack) track;
+            oth.incDurabilityOfTrack(1); return;
+        }
 
         if (this.getAtStation()) {
             this.simulateLoadEmbark(stationCur, stations);
@@ -397,12 +401,6 @@ public abstract class Train {
         }
 
         IntermediateTrainAndCargo cargo = (this instanceof IntermediateTrainAndCargo) ? (IntermediateTrainAndCargo) this : null;
-
-        if (track != null && track.getTrackType() == TrackType.BROKEN && this instanceof RepairTrain) {
-            UnbrokenTrack oth = (UnbrokenTrack) track;
-            oth.fixDurabilityOfTrack((RepairTrain) this);
-            return;
-        }
 
         if (cargo != null) {
             if (currentTrainPosition.isInBound(destination, cargo.getSpeed())) {
@@ -436,6 +434,11 @@ public abstract class Train {
             }
             this.setTrainPosition(currentTrainPosition.calculateNewPosition(destination, this.getSpeed()));
             this.setLocation(track.getTrackId());
+        }
+
+        if (track != null && track.getTrackType() == TrackType.BROKEN && this instanceof RepairTrain) {
+            UnbrokenTrack oth = (UnbrokenTrack) track;
+            oth.fixDurabilityOfTrack((RepairTrain) this);
         }
     }
     /**
