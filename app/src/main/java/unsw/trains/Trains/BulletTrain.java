@@ -23,7 +23,7 @@ public class BulletTrain extends IntermediateTrainAndCargo {
             true,
             true,
             MAX_LOAD,
-            true
+            isThereATrack(tracks, route.get(0), route.get(route.size() - 1)) != null
         );
     }
 }
